@@ -10,11 +10,9 @@
 :root{
 --primary:#0066cc;
 --secondary:#00aa66;
---alert:#cc0033;
---ecg-green:#00ff88;
---ecg-red:#ff4444;
 --bg:#0a1f2e;
 --grid:rgba(0,255,180,0.08);
+--ecg:#00ff88;
 }
 
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -24,9 +22,11 @@ font-family:system-ui,sans-serif;
 background:var(--bg);
 color:#e0f0ff;
 min-height:100vh;
-position:relative;
 overflow-x:hidden;
+position:relative;
 }
+
+/* grille ECG */
 
 .ecg-grid{
 position:fixed;
@@ -35,45 +35,52 @@ background-image:
 linear-gradient(to bottom,transparent 0,transparent 19px,var(--grid) 19px,var(--grid) 20px),
 linear-gradient(to right,transparent 0,transparent 19px,var(--grid) 19px,var(--grid) 20px);
 background-size:20px 20px;
-pointer-events:none;
 z-index:-2;
+pointer-events:none;
 }
 
-#ecg-container{
+/* conteneur ECG */
+
+.ecg-monitor{
 position:fixed;
 top:50%;
 left:0;
 width:100%;
-height:180px;
+height:160px;
 transform:translateY(-50%);
-z-index:-1;
 overflow:hidden;
+z-index:-1;
 pointer-events:none;
 }
+
+/* ligne ECG */
 
 .ecg-line{
 position:absolute;
 width:200%;
 height:100%;
+animation:scroll 6s linear infinite;
 }
 
-#freq-popup{
-position:fixed;
-bottom:20px;
-right:20px;
-background:rgba(0,0,0,0.6);
-backdrop-filter:blur(6px);
-color:#ffdd44;
-padding:12px 24px;
-border-radius:12px;
-font-weight:bold;
-font-size:1.3rem;
-box-shadow:0 4px 20px rgba(0,0,0,0.5);
-pointer-events:none;
-opacity:0;
-transition:opacity .4s;
-z-index:100;
+@keyframes scroll{
+0%{transform:translateX(0)}
+100%{transform:translateX(-50%)}
 }
+
+.ecg-line svg{
+width:100%;
+height:100%;
+}
+
+.ecg-line path{
+fill:none;
+stroke:var(--ecg);
+stroke-width:3;
+stroke-linecap:round;
+filter:drop-shadow(0 0 6px #00ff88);
+}
+
+/* HEADER */
 
 header{
 background:linear-gradient(135deg,#004080,#006699);
@@ -168,8 +175,59 @@ font-size:.9rem;
 <body>
 
 <div class="ecg-grid"></div>
-<div id="ecg-container"></div>
-<div id="freq-popup">Fréquence : 78 bpm</div>
+
+<div class="ecg-monitor">
+
+<div class="ecg-line">
+
+<svg viewBox="0 0 1200 160">
+
+<path d="
+M0 80 
+L120 80 
+L150 80 
+L170 60 
+L190 120 
+L210 40 
+L230 80 
+L300 80
+L320 80
+L340 60
+L360 120
+L380 40
+L400 80
+L470 80
+L500 80
+L520 60
+L540 120
+L560 40
+L580 80
+L650 80
+L680 80
+L700 60
+L720 120
+L740 40
+L760 80
+L830 80
+L860 80
+L880 60
+L900 120
+L920 40
+L940 80
+L1010 80
+L1040 80
+L1060 60
+L1080 120
+L1100 40
+L1120 80
+L1200 80
+"/>
+
+</svg>
+
+</div>
+
+</div>
 
 <header>
 <h1>Recrutement CHL – Centre Hospitalier de Liège</h1>
@@ -196,7 +254,7 @@ font-size:.9rem;
 <input type="text" placeholder="Nom complet" required>
 <input type="email" placeholder="Adresse e-mail" required>
 <input type="text" placeholder="Poste visé" required>
-<textarea rows="5" placeholder="Motivation / CV en texte ou lien LinkedIn / Drive..."></textarea>
+<textarea rows="5" placeholder="Motivation / CV ou lien LinkedIn..."></textarea>
 <button type="submit">Envoyer ma candidature</button>
 </form>
 
@@ -207,78 +265,6 @@ font-size:.9rem;
 <footer>
 © 2026 – Centre Hospitalier de Liège – Tous droits réservés
 </footer>
-
-<script>
-
-const PATH="M0 90 L40 90 Q55 75 70 90 L120 90 L130 92 L138 60 L146 120 L154 55 L162 90 L220 90 Q260 110 300 90 L500 90";
-
-function createECG(color="var(--ecg-green)",speed=6){
-
-const container=document.getElementById("ecg-container")
-
-const line=document.createElement("div")
-line.className="ecg-line"
-
-line.innerHTML=`
-<svg viewBox="0 0 500 180" width="100%" height="100%">
-<path d="${PATH}" fill="none" stroke="${color}" stroke-width="3" stroke-linecap="round"/>
-</svg>
-`
-
-container.appendChild(line)
-
-line.animate([
-{transform:"translateX(100%)"},
-{transform:"translateX(-100%)"}
-],{
-duration:speed*1000,
-iterations:1,
-easing:"linear"
-})
-
-setTimeout(()=>line.remove(),speed*1000)
-
-}
-
-function startAuto(){
-
-setInterval(()=>{
-
-const bpm=Math.floor(Math.random()*30)+65
-const fast=bpm>82
-
-const color=fast?"var(--ecg-red)":"var(--ecg-green)"
-const speed=fast?4:6
-
-createECG(color,speed)
-
-},2200)
-
-}
-
-document.body.addEventListener("click",(e)=>{
-
-if(e.target.closest("button,input,textarea,form")) return
-
-const bpm=Math.floor(Math.random()*45)+55
-const fast=bpm>82
-
-const color=fast?"var(--ecg-red)":"var(--ecg-green)"
-const speed=fast?3.5:6
-
-createECG(color,speed)
-
-const popup=document.getElementById("freq-popup")
-popup.textContent=`Fréquence : ${bpm} bpm`
-popup.style.opacity=1
-
-setTimeout(()=>popup.style.opacity=0,3000)
-
-})
-
-startAuto()
-
-</script>
 
 </body>
 </html>
