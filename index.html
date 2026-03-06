@@ -1,163 +1,170 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recrutement - Centre Hospitalier de Liège (CHL)</title>
-    <style>
-        :root {
-            --primary:    #0066cc;
-            --secondary:  #00aa66;
-            --alert:      #cc0033;
-            --ecg-green:  #00ff88;
-            --ecg-red:    #ff4444;
-            --bg:         #0a1f2e;
-            --grid:       rgba(0, 255, 180, 0.08);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recrutement - Centre Hospitalier de Liège (CHL)</title>
 
-        * { margin:0; padding:0; box-sizing:border-box; }
+<style>
 
-        body {
-            font-family: system-ui, sans-serif;
-            background: var(--bg);
-            color: #e0f0ff;
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-        }
+:root{
+--primary:#0066cc;
+--secondary:#00aa66;
+--alert:#cc0033;
+--ecg-green:#00ff88;
+--ecg-red:#ff4444;
+--bg:#0a1f2e;
+--grid:rgba(0,255,180,0.08);
+}
 
-        .ecg-grid {
-            position: fixed;
-            inset: 0;
-            background-image:
-                linear-gradient(to bottom, transparent 0, transparent 19px, var(--grid) 19px, var(--grid) 20px),
-                linear-gradient(to right,   transparent 0, transparent 19px, var(--grid) 19px, var(--grid) 20px);
-            background-size: 20px 20px;
-            pointer-events: none;
-            z-index: -2;
-        }
+*{margin:0;padding:0;box-sizing:border-box;}
 
-        #ecg-container {
-            position: fixed;
-            inset: 0;
-            z-index: -1;
-            pointer-events: none;
-            overflow: hidden;
-        }
+body{
+font-family:system-ui,sans-serif;
+background:var(--bg);
+color:#e0f0ff;
+min-height:100vh;
+position:relative;
+overflow-x:hidden;
+}
 
-        .ecg-trace {
-            position: absolute;
-            width: 300%;
-            height: 180px;
-            left: -100%;
-            top: 50%;
-            transform: translateY(-50%);
-        }
+.ecg-grid{
+position:fixed;
+inset:0;
+background-image:
+linear-gradient(to bottom,transparent 0,transparent 19px,var(--grid) 19px,var(--grid) 20px),
+linear-gradient(to right,transparent 0,transparent 19px,var(--grid) 19px,var(--grid) 20px);
+background-size:20px 20px;
+pointer-events:none;
+z-index:-2;
+}
 
-        #freq-popup {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(6px);
-            color: #ffdd44;
-            padding: 12px 24px;
-            border-radius: 12px;
-            font-weight: bold;
-            font-size: 1.3rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.4s;
-            z-index: 100;
-        }
+#ecg-container{
+position:fixed;
+top:50%;
+left:0;
+width:100%;
+height:180px;
+transform:translateY(-50%);
+z-index:-1;
+overflow:hidden;
+pointer-events:none;
+}
 
-        header {
-            background: linear-gradient(135deg, #004080, #006699);
-            padding: 60px 20px 40px;
-            text-align: center;
-            position: relative;
-        }
+.ecg-line{
+position:absolute;
+width:200%;
+height:100%;
+}
 
-        header h1 {
-            font-size: 2.8rem;
-            margin-bottom: 12px;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.6);
-        }
+#freq-popup{
+position:fixed;
+bottom:20px;
+right:20px;
+background:rgba(0,0,0,0.6);
+backdrop-filter:blur(6px);
+color:#ffdd44;
+padding:12px 24px;
+border-radius:12px;
+font-weight:bold;
+font-size:1.3rem;
+box-shadow:0 4px 20px rgba(0,0,0,0.5);
+pointer-events:none;
+opacity:0;
+transition:opacity .4s;
+z-index:100;
+}
 
-        main {
-            max-width: 1100px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
+header{
+background:linear-gradient(135deg,#004080,#006699);
+padding:60px 20px 40px;
+text-align:center;
+}
 
-        section {
-            background: rgba(255,255,255,0.07);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 16px;
-            padding: 32px;
-            margin: 32px 0;
-        }
+header h1{
+font-size:2.8rem;
+margin-bottom:12px;
+text-shadow:0 2px 8px rgba(0,0,0,0.6);
+}
 
-        h2 {
-            color: #00ffcc;
-            margin-bottom: 1.2em;
-            border-bottom: 2px solid rgba(0,255,204,0.3);
-            padding-bottom: 0.6em;
-        }
+main{
+max-width:1100px;
+margin:40px auto;
+padding:0 20px;
+}
 
-        ul { list-style: none; }
-        li {
-            background: rgba(0,0,0,0.2);
-            margin: 12px 0;
-            padding: 16px;
-            border-radius: 10px;
-            transition: all 0.25s;
-        }
-        li:hover {
-            background: rgba(0,180,120,0.25);
-            transform: translateX(8px);
-        }
+section{
+background:rgba(255,255,255,0.07);
+backdrop-filter:blur(10px);
+border:1px solid rgba(255,255,255,0.12);
+border-radius:16px;
+padding:32px;
+margin:32px 0;
+}
 
-        form {
-            display: grid;
-            gap: 16px;
-        }
+h2{
+color:#00ffcc;
+margin-bottom:1.2em;
+border-bottom:2px solid rgba(0,255,204,0.3);
+padding-bottom:.6em;
+}
 
-        input, textarea {
-            padding: 14px;
-            border: 1px solid #004466;
-            border-radius: 8px;
-            background: rgba(255,255,255,0.05);
-            color: white;
-            font-size: 1.05rem;
-        }
+ul{list-style:none;}
 
-        button {
-            background: #00aa66;
-            color: white;
-            border: none;
-            padding: 16px;
-            font-size: 1.1rem;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        button:hover {
-            background: #00cc88;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0,200,120,0.4);
-        }
+li{
+background:rgba(0,0,0,0.2);
+margin:12px 0;
+padding:16px;
+border-radius:10px;
+transition:.25s;
+}
 
-        footer {
-            text-align: center;
-            padding: 40px 20px;
-            color: #88aacc;
-            font-size: 0.9rem;
-        }
-    </style>
+li:hover{
+background:rgba(0,180,120,0.25);
+transform:translateX(8px);
+}
+
+form{
+display:grid;
+gap:16px;
+}
+
+input,textarea{
+padding:14px;
+border:1px solid #004466;
+border-radius:8px;
+background:rgba(255,255,255,0.05);
+color:white;
+font-size:1.05rem;
+}
+
+button{
+background:#00aa66;
+color:white;
+border:none;
+padding:16px;
+font-size:1.1rem;
+border-radius:10px;
+cursor:pointer;
+transition:.3s;
+}
+
+button:hover{
+background:#00cc88;
+transform:translateY(-2px);
+box-shadow:0 8px 20px rgba(0,200,120,0.4);
+}
+
+footer{
+text-align:center;
+padding:40px 20px;
+color:#88aacc;
+font-size:.9rem;
+}
+
+</style>
 </head>
+
 <body>
 
 <div class="ecg-grid"></div>
@@ -165,109 +172,113 @@
 <div id="freq-popup">Fréquence : 78 bpm</div>
 
 <header>
-    <h1>Recrutement CHL – Centre Hospitalier de Liège</h1>
-    <p>Rejoignez une équipe qui fait battre le cœur de la région</p>
+<h1>Recrutement CHL – Centre Hospitalier de Liège</h1>
+<p>Rejoignez une équipe qui fait battre le cœur de la région</p>
 </header>
 
 <main>
-    <section>
-        <h2>Postes ouverts actuellement</h2>
-        <ul>
-            <li>Infirmier(ère) – Urgences & Soins Intensifs</li>
-            <li>Médecin spécialiste – Cardiologie / Radiologie</li>
-            <li>Technicien(ne) de laboratoire – Hématologie / Biochimie</li>
-            <li>Assistant administratif – Service des ressources humaines</li>
-            <li>Kinésithérapeute – Rééducation neurologique</li>
-        </ul>
-    </section>
 
-    <section>
-        <h2>Envoyer votre candidature</h2>
-        <form>
-            <input type="text"    placeholder="Nom complet" required>
-            <input type="email"   placeholder="Adresse e-mail" required>
-            <input type="text"    placeholder="Poste visé" required>
-            <textarea rows="5"    placeholder="Motivation / CV en texte ou lien LinkedIn / Drive..."></textarea>
-            <button type="submit">Envoyer ma candidature</button>
-        </form>
-    </section>
+<section>
+<h2>Postes ouverts actuellement</h2>
+<ul>
+<li>Infirmier(ère) – Urgences & Soins Intensifs</li>
+<li>Médecin spécialiste – Cardiologie / Radiologie</li>
+<li>Technicien(ne) de laboratoire – Hématologie / Biochimie</li>
+<li>Assistant administratif – Service des ressources humaines</li>
+<li>Kinésithérapeute – Rééducation neurologique</li>
+</ul>
+</section>
+
+<section>
+<h2>Envoyer votre candidature</h2>
+
+<form>
+<input type="text" placeholder="Nom complet" required>
+<input type="email" placeholder="Adresse e-mail" required>
+<input type="text" placeholder="Poste visé" required>
+<textarea rows="5" placeholder="Motivation / CV en texte ou lien LinkedIn / Drive..."></textarea>
+<button type="submit">Envoyer ma candidature</button>
+</form>
+
+</section>
+
 </main>
 
 <footer>
-    © 2026 – Centre Hospitalier de Liège – Tous droits réservés
+© 2026 – Centre Hospitalier de Liège – Tous droits réservés
 </footer>
 
 <script>
-// Chemin SVG corrigé – SANS commentaires à l'intérieur !
-const QRS_PATH = "M0,90 L40,90 Q55,75 70,90 L120,90 L130,92 L138,60 L146,120 L154,55 L162,90 L220,90 Q260,110 300,90 L500,90";
 
-function createTrace(color = "var(--ecg-green)", speed = 8) {
-    const container = document.getElementById("ecg-container");
-    
-    const trace = document.createElement("div");
-    trace.className = "ecg-trace";
-    
-    trace.innerHTML = `
-        <svg viewBox="0 0 500 180" preserveAspectRatio="none" width="100%" height="100%">
-            <path 
-                d="${QRS_PATH}" 
-                fill="none" 
-                stroke="${color}" 
-                stroke-width="2.4" 
-                stroke-linecap="round"
-            />
-        </svg>
-    `;
+const PATH="M0 90 L40 90 Q55 75 70 90 L120 90 L130 92 L138 60 L146 120 L154 55 L162 90 L220 90 Q260 110 300 90 L500 90";
 
-    container.appendChild(trace);
+function createECG(color="var(--ecg-green)",speed=6){
 
-    // Animation fluide de gauche à droite
-    trace.animate([
-        { transform: "translateX(0%)" },
-        { transform: "translateX(-66.66%)" }   // défile jusqu'à ce que le tracé soit sorti
-    ], {
-        duration: speed * 1000,
-        easing: "linear",
-        fill: "forwards"
-    });
+const container=document.getElementById("ecg-container")
 
-    setTimeout(() => trace.remove(), speed * 1000 + 800);
+const line=document.createElement("div")
+line.className="ecg-line"
+
+line.innerHTML=`
+<svg viewBox="0 0 500 180" width="100%" height="100%">
+<path d="${PATH}" fill="none" stroke="${color}" stroke-width="3" stroke-linecap="round"/>
+</svg>
+`
+
+container.appendChild(line)
+
+line.animate([
+{transform:"translateX(100%)"},
+{transform:"translateX(-100%)"}
+],{
+duration:speed*1000,
+iterations:1,
+easing:"linear"
+})
+
+setTimeout(()=>line.remove(),speed*1000)
+
 }
 
-let autoInterval;
+function startAuto(){
 
-function startAutoBeats() {
-    createTrace(); // premier battement
-    
-    autoInterval = setInterval(() => {
-        const bpm = Math.floor(Math.random() * 30) + 65; // 65–95 bpm
-        const fast = bpm > 82;
-        const col = fast ? "var(--ecg-red)" : "var(--ecg-green)";
-        const spd = fast ? 5.5 : 8.5;
-        
-        createTrace(col, spd);
-    }, 4200); // ~ rythme naturel
+setInterval(()=>{
+
+const bpm=Math.floor(Math.random()*30)+65
+const fast=bpm>82
+
+const color=fast?"var(--ecg-red)":"var(--ecg-green)"
+const speed=fast?4:6
+
+createECG(color,speed)
+
+},2200)
+
 }
 
-// Clic → battement bonus + popup
-document.body.addEventListener("click", (e) => {
-    if (e.target.closest("button, input, a, textarea, form")) return;
+document.body.addEventListener("click",(e)=>{
 
-    const bpm = Math.floor(Math.random() * 45) + 55;
-    const fast = bpm > 82;
-    const color = fast ? "var(--ecg-red)" : "var(--ecg-green)";
-    const speed = fast ? 5 : 9;
+if(e.target.closest("button,input,textarea,form")) return
 
-    createTrace(color, speed);
+const bpm=Math.floor(Math.random()*45)+55
+const fast=bpm>82
 
-    const popup = document.getElementById("freq-popup");
-    popup.textContent = `Fréquence : ${bpm} bpm`;
-    popup.style.opacity = 1;
-    setTimeout(() => popup.style.opacity = 0, 3400);
-});
+const color=fast?"var(--ecg-red)":"var(--ecg-green)"
+const speed=fast?3.5:6
 
-// Lancement
-startAutoBeats();
+createECG(color,speed)
+
+const popup=document.getElementById("freq-popup")
+popup.textContent=`Fréquence : ${bpm} bpm`
+popup.style.opacity=1
+
+setTimeout(()=>popup.style.opacity=0,3000)
+
+})
+
+startAuto()
+
 </script>
+
 </body>
 </html>
