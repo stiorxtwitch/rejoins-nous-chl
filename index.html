@@ -5,299 +5,285 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recrutement - Centre Hospitalier de Liège (CHL)</title>
     <style>
-        /* CSS Hyper sophistiqué */
         :root {
-            --primary-color: #007bff; /* Bleu hospitalier */
-            --secondary-color: #28a745; /* Vert santé */
-            --accent-color: #dc3545; /* Rouge alerte pour ECG */
-            --bg-color: #f8f9fa; /* Fond clair */
-            --text-color: #212529; /* Texte sombre */
-            --ecg-line-color: #28a745; /* Vert ECG par défaut */
-            --ecg-grid-color: rgba(0, 0, 0, 0.1); /* Grille ECG */
+            --primary:    #0066cc;
+            --secondary:  #00aa66;
+            --alert:      #cc0033;
+            --ecg-green:  #00ff88;
+            --ecg-red:    #ff4444;
+            --bg:         #0a1f2e;
+            --grid:       rgba(0, 255, 180, 0.08);
         }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
 
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
+            font-family: system-ui, sans-serif;
+            background: var(--bg);
+            color: #e0f0ff;
+            min-height: 100vh;
             position: relative;
+            overflow-x: hidden;
         }
 
-        /* Fond ECG sophistiqué */
-        .ecg-background {
+        /* Grille ECG de fond */
+        .ecg-grid {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                repeating-linear-gradient(to bottom, transparent 0, transparent 4px, var(--ecg-grid-color) 4px, var(--ecg-grid-color) 5px),
-                repeating-linear-gradient(to right, transparent 0, transparent 4px, var(--ecg-grid-color) 4px, var(--ecg-grid-color) 5px);
-            background-size: 5px 5px;
-            z-index: -1;
-            opacity: 0.2;
+            inset: 0;
+            background-image:
+                linear-gradient(to bottom, transparent 0, transparent 19px, var(--grid) 19px, var(--grid) 20px),
+                linear-gradient(to right,   transparent 0, transparent 19px, var(--grid) 19px, var(--grid) 20px);
+            background-size: 20px 20px;
+            pointer-events: none;
+            z-index: -2;
         }
 
-        .ecg-line {
+        /* Conteneur des ondes ECG */
+        #ecg-container {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             z-index: -1;
-            display: flex;
-            align-items: center;
+            pointer-events: none;
             overflow: hidden;
         }
 
-        #ecg-svg {
-            width: 100%;
-            height: 200px;
+        .ecg-trace {
+            position: absolute;
+            width: 300%;
+            height: 180px;
+            left: -100%;
+            top: 50%;
+            transform: translateY(-50%);
         }
 
-        /* Fréquence qui apparaît sur clic */
-        .frequency-display {
+        /* Fréquence popup */
+        #freq-popup {
             position: fixed;
             bottom: 20px;
             right: 20px;
-            background: rgba(255, 255, 255, 0.8);
-            padding: 10px 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            font-size: 1.2em;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(6px);
+            color: #ffdd44;
+            padding: 12px 24px;
+            border-radius: 12px;
             font-weight: bold;
-            color: var(--accent-color);
-            display: none;
-            z-index: 10;
-            animation: fadeInOut 3s ease-in-out;
+            font-size: 1.3rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.4s;
+            z-index: 100;
         }
 
-        @keyframes fadeInOut {
-            0% { opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { opacity: 0; }
-        }
-
-        /* Header sophistiqué */
+        /* Contenu principal */
         header {
-            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 40px 20px;
+            background: linear-gradient(135deg, #004080, #006699);
+            padding: 60px 20px 40px;
             text-align: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             position: relative;
-            overflow: hidden;
-        }
-
-        header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
-            animation: pulse 5s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
         }
 
         header h1 {
-            margin: 0;
-            font-size: 2.5em;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            font-size: 2.8rem;
+            margin-bottom: 12px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.6);
         }
 
-        /* Sections */
-        section {
-            max-width: 1200px;
+        main {
+            max-width: 1100px;
             margin: 40px auto;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
+            padding: 0 20px;
         }
 
-        section:hover {
-            transform: translateY(-5px);
+        section {
+            background: rgba(255,255,255,0.07);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 16px;
+            padding: 32px;
+            margin: 32px 0;
         }
 
         h2 {
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--secondary-color);
-            padding-bottom: 10px;
-            margin-bottom: 20px;
+            color: #00ffcc;
+            margin-bottom: 1.2em;
+            border-bottom: 2px solid rgba(0,255,204,0.3);
+            padding-bottom: 0.6em;
         }
 
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
+        ul { list-style: none; }
         li {
-            background: var(--bg-color);
-            margin: 10px 0;
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            transition: background 0.3s;
+            background: rgba(0,0,0,0.2);
+            margin: 12px 0;
+            padding: 16px;
+            border-radius: 10px;
+            transition: all 0.25s;
         }
-
         li:hover {
-            background: var(--primary-color);
-            color: white;
+            background: rgba(0,180,120,0.25);
+            transform: translateX(8px);
         }
 
-        /* Formulaire sophistiqué */
         form {
             display: grid;
-            gap: 15px;
+            gap: 16px;
         }
 
         input, textarea {
-            padding: 10px;
-            border: 1px solid var(--primary-color);
-            border-radius: 5px;
-            transition: border 0.3s;
-        }
-
-        input:focus, textarea:focus {
-            border-color: var(--secondary-color);
-            outline: none;
+            padding: 14px;
+            border: 1px solid #004466;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.05);
+            color: white;
+            font-size: 1.05rem;
         }
 
         button {
-            background: var(--primary-color);
+            background: #00aa66;
             color: white;
-            padding: 10px 20px;
             border: none;
-            border-radius: 5px;
+            padding: 16px;
+            font-size: 1.1rem;
+            border-radius: 10px;
             cursor: pointer;
-            transition: background 0.3s, transform 0.3s;
+            transition: all 0.3s;
         }
-
         button:hover {
-            background: var(--secondary-color);
-            transform: scale(1.05);
+            background: #00cc88;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,200,120,0.4);
         }
 
-        /* Footer */
         footer {
-            background: var(--primary-color);
-            color: white;
             text-align: center;
-            padding: 20px;
-            margin-top: 40px;
+            padding: 40px 20px;
+            color: #88aacc;
+            font-size: 0.9rem;
         }
     </style>
 </head>
-<body onclick="showFrequency()">
-    <div class="ecg-background"></div>
-    <div class="ecg-line">
-        <svg id="ecg-svg" width="100%" height="200px" viewBox="0 0 2000 200" preserveAspectRatio="none"></svg>
-    </div>
-    <div class="frequency-display" id="frequency">Fréquence cardiaque : 72 bpm</div>
+<body>
 
-    <header>
-        <h1>Recrutement au Centre Hospitalier de Liège (CHL)</h1>
-        <p>Rejoignez notre équipe dédiée à la santé et au bien-être des patients.</p>
-    </header>
+<div class="ecg-grid"></div>
+<div id="ecg-container"></div>
+<div id="freq-popup">Fréquence : 78 bpm</div>
 
-    <section id="offres">
-        <h2>Offres d'Emploi Disponibles</h2>
+<header>
+    <h1>Recrutement CHL – Centre Hospitalier de Liège</h1>
+    <p>Rejoignez une équipe qui fait battre le cœur de la région</p>
+</header>
+
+<main>
+    <section>
+        <h2>Postes ouverts actuellement</h2>
         <ul>
-            <li><strong>Infirmier(ère)</strong> - Temps plein, service des urgences.</li>
-            <li><strong>Médecin Spécialiste</strong> - Cardiologie, expérience requise.</li>
-            <li><strong>Technicien de Laboratoire</strong> - Analyse médicale, CDD.</li>
-            <li><strong>Assistant Administratif</strong> - Gestion des dossiers patients.</li>
+            <li>Infirmier(ère) – Urgences & Soins Intensifs</li>
+            <li>Médecin spécialiste – Cardiologie / Radiologie</li>
+            <li>Technicien(ne) de laboratoire – Hématologie / Biochimie</li>
+            <li>Assistant administratif – Service des ressources humaines</li>
+            <li>Kinésithérapeute – Rééducation neurologique</li>
         </ul>
     </section>
 
-    <section id="candidature">
-        <h2>Postuler</h2>
+    <section>
+        <h2>Envoyer votre candidature</h2>
         <form>
-            <label for="nom">Nom :</label>
-            <input type="text" id="nom" name="nom" required>
-
-            <label for="email">Email :</label>
-            <input type="email" id="email" name="email" required>
-
-            <label for="poste">Poste Souhaité :</label>
-            <input type="text" id="poste" name="poste" required>
-
-            <label for="cv">Message / CV :</label>
-            <textarea id="cv" name="cv" rows="5" required></textarea>
-
-            <button type="submit">Envoyer Candidature</button>
+            <input type="text"    placeholder="Nom complet" required>
+            <input type="email"   placeholder="Adresse e-mail" required>
+            <input type="text"    placeholder="Poste visé" required>
+            <textarea rows="5"    placeholder="Motivation / CV en texte ou lien LinkedIn / Drive..."></textarea>
+            <button type="submit">Envoyer ma candidature</button>
         </form>
     </section>
+</main>
 
-    <footer>
-        <p>&copy; 2026 Centre Hospitalier de Liège. Tous droits réservés.</p>
-    </footer>
+<footer>
+    © 2026 – Centre Hospitalier de Liège – Tous droits réservés
+</footer>
 
-    <script>
-        function addEcgWave(color, dur, randomFreq) {
-            const svg = document.getElementById('ecg-svg');
-            const ns = 'http://www.w3.org/2000/svg';
-            const g = document.createElementNS(ns, 'g');
-            const path = document.createElementNS(ns, 'path');
-            const d = 'M0 100 L50 100 C60 100 70 90 80 100 L110 100 L115 105 L125 40 L135 130 L140 100 L200 100 C220 100 240 80 260 100 L350 100';
-            path.setAttribute('d', d);
-            path.setAttribute('stroke', color);
-            path.setAttribute('stroke-width', '2');
-            path.setAttribute('fill', 'none');
-            g.appendChild(path);
-            svg.appendChild(g);
+<script>
+// Forme PQRST plus réaliste
+const QRS_PATH = `
+    M 0,90 
+    L 40,90              // ligne isoélectrique
+    Q 55,75 70,90        // petite onde P
+    L 120,90 
+    L 130,92 L 138,60 L 146,120 L 154,55 L 162,90   // QRS complexe
+    L 220,90 
+    Q 260,110 300,90     // onde T
+    L 400,90             // ligne iso jusqu'au prochain battement
+`;
 
-            const ww = window.innerWidth;
-            const viewBoxW = 2000;
-            const beatL = 350;
-            const wavePx = (beatL / viewBoxW) * ww;
-            const start = ww;
-            const end = -wavePx;
+function createTrace(color = "var(--ecg-green)", speed = 8) {
+    const container = document.getElementById("ecg-container");
+    
+    const trace = document.createElement("div");
+    trace.className = "ecg-trace";
+    
+    trace.innerHTML = `
+        <svg viewBox="0 0 400 180" preserveAspectRatio="none" width="100%" height="100%">
+            <path 
+                d="${QRS_PATH}" 
+                fill="none" 
+                stroke="${color}" 
+                stroke-width="2.2" 
+                stroke-linecap="round"
+            />
+        </svg>
+    `;
 
-            g.style.transform = `translateX(${start}px)`;
-            g.style.transition = `transform ${dur}s linear`;
-            setTimeout(() => {
-                g.style.transform = `translateX(${end}px)`;
-            }, 10);
-            setTimeout(() => {
-                g.remove();
-            }, dur * 1000 + 1000);
-        }
+    container.appendChild(trace);
 
-        function showFrequency() {
-            const freqDisplay = document.getElementById('frequency');
-            // Générer une fréquence aléatoire entre 60 et 100 bpm
-            const randomFreq = Math.floor(Math.random() * 41) + 60;
-            freqDisplay.textContent = `Fréquence cardiaque : ${randomFreq} bpm`;
-            freqDisplay.style.display = 'block';
-            // Réinitialiser l'animation pour qu'elle recommence
-            freqDisplay.style.animation = 'none';
-            setTimeout(() => {
-                freqDisplay.style.animation = 'fadeInOut 3s ease-in-out';
-            }, 10);
-            // Changer la couleur de l'ECG en fonction de la fréquence
-            const color = randomFreq > 80 ? 'var(--accent-color)' : 'var(--secondary-color)';
-            // Ajuster la vitesse de l'animation ECG
-            const dur = randomFreq > 80 ? 1 : 2;
-            // Ajouter une nouvelle onde ECG
-            addEcgWave(getComputedStyle(document.documentElement).getPropertyValue(color), dur, randomFreq);
-            // Cacher après l'animation
-            setTimeout(() => {
-                freqDisplay.style.display = 'none';
-            }, 3000);
-        }
-    </script>
+    // Animation de défilement
+    trace.animate([
+        { transform: "translateX(-25%)" },
+        { transform: "translateX(-100%)" }
+    ], {
+        duration: speed * 1000,
+        easing: "linear",
+        fill: "forwards"
+    });
+
+    // Nettoyage
+    setTimeout(() => trace.remove(), speed * 1000 + 500);
+}
+
+let autoInterval;
+
+// Battements automatiques
+function startAutoBeats() {
+    createTrace(); // premier battement immédiat
+    
+    autoInterval = setInterval(() => {
+        const bpm = Math.floor(Math.random() * 30) + 65; // 65–95 bpm
+        const fast = bpm > 82;
+        const col = fast ? "var(--ecg-red)" : "var(--ecg-green)";
+        const spd = fast ? 5.5 : 8.5; // plus rapide si tachycardie
+        
+        createTrace(col, spd);
+    }, 3800); // ~ tous les 3.8s → rythme réaliste
+}
+
+// Clic → battement supplémentaire + popup fréquence
+document.body.addEventListener("click", (e) => {
+    // Ignorer les clics sur les boutons / inputs / liens
+    if (e.target.closest("button, input, a, textarea")) return;
+
+    const bpm = Math.floor(Math.random() * 45) + 55; // 55–100
+    const fast = bpm > 82;
+    const color = fast ? "var(--ecg-red)" : "var(--ecg-green)";
+    const speed = fast ? 5 : 9;
+
+    createTrace(color, speed);
+
+    const popup = document.getElementById("freq-popup");
+    popup.textContent = `Fréquence : ${bpm} bpm`;
+    popup.style.opacity = 1;
+    setTimeout(() => popup.style.opacity = 0, 3400);
+});
+
+// Démarrage automatique des ondes
+startAutoBeats();
+</script>
 </body>
 </html>
