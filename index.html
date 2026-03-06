@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Recrutement - Centre Hospitalier de Liège</title>
+
+<title>Recrutement - CHL</title>
 
 <style>
 
@@ -13,13 +14,16 @@
 --ecg:#00ff9c;
 }
 
-*{margin:0;padding:0;box-sizing:border-box;}
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
 
 body{
 font-family:system-ui,sans-serif;
 background:var(--bg);
 color:#e0f0ff;
-min-height:100vh;
 overflow-x:hidden;
 }
 
@@ -28,72 +32,89 @@ overflow-x:hidden;
 .ecg-grid{
 position:fixed;
 inset:0;
+
 background-image:
 linear-gradient(to bottom,transparent 0,transparent 19px,var(--grid) 19px,var(--grid) 20px),
 linear-gradient(to right,transparent 0,transparent 19px,var(--grid) 19px,var(--grid) 20px);
+
 background-size:20px 20px;
 z-index:-2;
-pointer-events:none;
 }
 
 /* écran ECG */
 
 .ecg-monitor{
+
 position:fixed;
 top:50%;
 left:0;
+
 width:100%;
 height:180px;
+
 transform:translateY(-50%);
 overflow:hidden;
+
 z-index:-1;
+
+}
+
+/* bande ECG */
+
+.ecg-strip{
+
+display:flex;
+width:200%;
+height:100%;
+
+animation:scroll 8s linear infinite;
+
+}
+
+/* animation continue */
+
+@keyframes scroll{
+
+0%{
+transform:translateX(0);
+}
+
+100%{
+transform:translateX(-50%);
+}
+
 }
 
 /* svg */
 
-.ecg-monitor svg{
-width:200%;
+.ecg-strip svg{
+
+width:50%;
 height:100%;
+
 }
 
-/* ligne ECG */
+/* tracé ECG */
 
 .ecg-path{
 
-stroke:var(--ecg);
-stroke-width:3;
 fill:none;
-stroke-linecap:round;
+stroke:var(--ecg);
+stroke-width:3.2;
 
-/* glow */
+stroke-linecap:round;
+stroke-linejoin:round;
+
+/* glow médical */
 
 filter:
 drop-shadow(0 0 4px #00ff88)
 drop-shadow(0 0 8px #00ff88)
-drop-shadow(0 0 14px #00ffaa);
-
-/* animation ECG */
-
-stroke-dasharray:2000;
-stroke-dashoffset:2000;
-
-animation:draw 4s linear infinite;
+drop-shadow(0 0 16px #00ffaa);
 
 }
 
-@keyframes draw{
-
-0%{
-stroke-dashoffset:2000;
-}
-
-100%{
-stroke-dashoffset:0;
-}
-
-}
-
-/* interface */
+/* contenu site */
 
 header{
 background:linear-gradient(135deg,#004080,#006699);
@@ -104,7 +125,6 @@ text-align:center;
 header h1{
 font-size:2.8rem;
 margin-bottom:12px;
-text-shadow:0 2px 8px rgba(0,0,0,0.6);
 }
 
 main{
@@ -166,13 +186,6 @@ padding:16px;
 font-size:1.1rem;
 border-radius:10px;
 cursor:pointer;
-transition:.3s;
-}
-
-button:hover{
-background:#00cc88;
-transform:translateY(-2px);
-box-shadow:0 8px 20px rgba(0,200,120,0.4);
 }
 
 footer{
@@ -191,79 +204,121 @@ font-size:.9rem;
 
 <div class="ecg-monitor">
 
-<svg viewBox="0 0 2000 180">
+<div class="ecg-strip">
 
-<!-- onde PQRST réaliste -->
+<!-- ECG 1 -->
+
+<svg viewBox="0 0 1200 180">
 
 <path class="ecg-path" d="
 
 M0 90
-
 L120 90
-
 Q150 75 180 90
-
 L220 90
 
 L250 95
 L260 60
 L270 120
-L280 45
+L280 40
 L290 90
 
 L400 90
 
 Q430 75 460 90
-
 L500 90
 
 L530 95
 L540 60
 L550 120
-L560 45
+L560 40
 L570 90
 
 L680 90
 
 Q710 75 740 90
-
 L780 90
 
 L810 95
 L820 60
 L830 120
-L840 45
+L840 40
 L850 90
 
 L960 90
 
 Q990 75 1020 90
-
 L1060 90
 
 L1090 95
 L1100 60
 L1110 120
-L1120 45
+L1120 40
 L1130 90
 
-L1240 90
-
-Q1270 75 1300 90
-
-L1340 90
-
-L1370 95
-L1380 60
-L1390 120
-L1400 45
-L1410 90
-
-L2000 90
+L1200 90
 
 "/>
 
 </svg>
+
+<!-- ECG 2 (copie pour boucle parfaite) -->
+
+<svg viewBox="0 0 1200 180">
+
+<path class="ecg-path" d="
+
+M0 90
+L120 90
+Q150 75 180 90
+L220 90
+
+L250 95
+L260 60
+L270 120
+L280 40
+L290 90
+
+L400 90
+
+Q430 75 460 90
+L500 90
+
+L530 95
+L540 60
+L550 120
+L560 40
+L570 90
+
+L680 90
+
+Q710 75 740 90
+L780 90
+
+L810 95
+L820 60
+L830 120
+L840 40
+L850 90
+
+L960 90
+
+Q990 75 1020 90
+L1060 90
+
+L1090 95
+L1100 60
+L1110 120
+L1120 40
+L1130 90
+
+L1200 90
+
+"/>
+
+</svg>
+
+</div>
 
 </div>
 
@@ -276,24 +331,33 @@ L2000 90
 
 <section>
 <h2>Postes ouverts actuellement</h2>
+
 <ul>
 <li>Infirmier(ère) – Urgences & Soins Intensifs</li>
 <li>Médecin spécialiste – Cardiologie / Radiologie</li>
-<li>Technicien(ne) de laboratoire – Hématologie / Biochimie</li>
-<li>Assistant administratif – Service des ressources humaines</li>
+<li>Technicien(ne) de laboratoire – Hématologie</li>
+<li>Assistant administratif – Ressources humaines</li>
 <li>Kinésithérapeute – Rééducation neurologique</li>
 </ul>
+
 </section>
 
 <section>
+
 <h2>Envoyer votre candidature</h2>
 
 <form>
+
 <input type="text" placeholder="Nom complet" required>
+
 <input type="email" placeholder="Adresse e-mail" required>
+
 <input type="text" placeholder="Poste visé" required>
-<textarea rows="5" placeholder="Motivation / CV ou lien LinkedIn..."></textarea>
+
+<textarea rows="5" placeholder="Motivation ou CV"></textarea>
+
 <button type="submit">Envoyer ma candidature</button>
+
 </form>
 
 </section>
@@ -301,7 +365,9 @@ L2000 90
 </main>
 
 <footer>
-© 2026 – Centre Hospitalier de Liège – Tous droits réservés
+
+© 2026 – Centre Hospitalier de Liège
+
 </footer>
 
 </body>
