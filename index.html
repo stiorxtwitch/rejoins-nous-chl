@@ -14,7 +14,6 @@
             --text-color: #212529; /* Texte sombre */
             --ecg-line-color: #28a745; /* Vert ECG par défaut */
             --ecg-grid-color: rgba(0, 0, 0, 0.1); /* Grille ECG */
-            --animation-duration: 2s; /* Durée de l'animation ECG */
         }
 
         body {
@@ -43,21 +42,20 @@
         }
 
         .ecg-line {
-            position: absolute;
+            position: fixed;
+            top: 0;
             left: 0;
             width: 100%;
-            height: 10vh;
-            overflow: hidden;
+            height: 100%;
             z-index: -1;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
         }
 
-        .ecg-wave {
-            animation: ecg-animate var(--animation-duration) linear infinite;
-        }
-
-        @keyframes ecg-animate {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-1200); }
+        #ecg-svg {
+            width: 100%;
+            height: 200px;
         }
 
         /* Fréquence qui apparaît sur clic */
@@ -204,12 +202,8 @@
 </head>
 <body onclick="showFrequency()">
     <div class="ecg-background"></div>
-    <div class="ecg-line" style="top: 10vh;">
-        <svg width="100%" height="100%" viewBox="0 0 1200 100" preserveAspectRatio="none">
-            <g class="ecg-wave">
-                <path d="M0 50 L40 50 Q60 40 80 50 L120 50 L125 55 L130 30 L135 55 L180 50 Q210 35 240 50 L300 50 L340 50 Q360 40 380 50 L420 50 L425 55 L430 30 L435 55 L480 50 Q510 35 540 50 L600 50 L640 50 Q660 40 680 50 L720 50 L725 55 L730 30 L735 55 L780 50 Q810 35 840 50 L900 50 L940 50 Q960 40 980 50 L1020 50 L1025 55 L1030 30 L1035 55 L1080 50 Q1110 35 1140 50 L1200 50 L1240 50 Q1260 40 1280 50 L1320 50 L1325 55 L1330 30 L1335 55 L1380 50 Q1410 35 1440 50 L1500 50 L1540 50 Q1560 40 1580 50 L1620 50 L1625 55 L1630 30 L1635 55 L1680 50 Q1710 35 1740 50 L1800 50 L1840 50 Q1860 40 1880 50 L1920 50 L1925 55 L1930 30 L1935 55 L1980 50 Q2010 35 2040 50 L2100 50 L2140 50 Q2160 40 2180 50 L2220 50 L2225 55 L2230 30 L2235 55 L2280 50 Q2310 35 2340 50 L2400 50" stroke="var(--ecg-line-color)" stroke-width="2" fill="none"/>
-            </g>
-        </svg>
+    <div class="ecg-line">
+        <svg id="ecg-svg" width="100%" height="200px" viewBox="0 0 2000 200" preserveAspectRatio="none"></svg>
     </div>
     <div class="frequency-display" id="frequency">Fréquence cardiaque : 72 bpm</div>
 
@@ -252,22 +246,34 @@
     </footer>
 
     <script>
-        let ecgCount = 1; // Initial line already present
+        function addEcgWave(color, dur, randomFreq) {
+            const svg = document.getElementById('ecg-svg');
+            const ns = 'http://www.w3.org/2000/svg';
+            const g = document.createElementNS(ns, 'g');
+            const path = document.createElementNS(ns, 'path');
+            const d = 'M0 100 L50 100 C60 100 70 90 80 100 L110 100 L115 105 L125 40 L135 130 L140 100 L200 100 C220 100 240 80 260 100 L350 100';
+            path.setAttribute('d', d);
+            path.setAttribute('stroke', color);
+            path.setAttribute('stroke-width', '2');
+            path.setAttribute('fill', 'none');
+            g.appendChild(path);
+            svg.appendChild(g);
 
-        function addEcgLine() {
-            if (ecgCount >= 6) return; // Limit to 6 lines to avoid overcrowding
-            const newLine = document.createElement('div');
-            newLine.className = 'ecg-line';
-            newLine.style.top = (10 + ecgCount * 15) + 'vh';
-            newLine.innerHTML = `
-                <svg width="100%" height="100%" viewBox="0 0 1200 100" preserveAspectRatio="none">
-                    <g class="ecg-wave">
-                        <path d="M0 50 L40 50 Q60 40 80 50 L120 50 L125 55 L130 30 L135 55 L180 50 Q210 35 240 50 L300 50 L340 50 Q360 40 380 50 L420 50 L425 55 L430 30 L435 55 L480 50 Q510 35 540 50 L600 50 L640 50 Q660 40 680 50 L720 50 L725 55 L730 30 L735 55 L780 50 Q810 35 840 50 L900 50 L940 50 Q960 40 980 50 L1020 50 L1025 55 L1030 30 L1035 55 L1080 50 Q1110 35 1140 50 L1200 50 L1240 50 Q1260 40 1280 50 L1320 50 L1325 55 L1330 30 L1335 55 L1380 50 Q1410 35 1440 50 L1500 50 L1540 50 Q1560 40 1580 50 L1620 50 L1625 55 L1630 30 L1635 55 L1680 50 Q1710 35 1740 50 L1800 50 L1840 50 Q1860 40 1880 50 L1920 50 L1925 55 L1930 30 L1935 55 L1980 50 Q2010 35 2040 50 L2100 50 L2140 50 Q2160 40 2180 50 L2220 50 L2225 55 L2230 30 L2235 55 L2280 50 Q2310 35 2340 50 L2400 50" stroke="var(--ecg-line-color)" stroke-width="2" fill="none"/>
-                    </g>
-                </svg>
-            `;
-            document.body.appendChild(newLine);
-            ecgCount++;
+            const ww = window.innerWidth;
+            const viewBoxW = 2000;
+            const beatL = 350;
+            const wavePx = (beatL / viewBoxW) * ww;
+            const start = ww;
+            const end = -wavePx;
+
+            g.style.transform = `translateX(${start}px)`;
+            g.style.transition = `transform ${dur}s linear`;
+            setTimeout(() => {
+                g.style.transform = `translateX(${end}px)`;
+            }, 10);
+            setTimeout(() => {
+                g.remove();
+            }, dur * 1000 + 1000);
         }
 
         function showFrequency() {
@@ -282,12 +288,11 @@
                 freqDisplay.style.animation = 'fadeInOut 3s ease-in-out';
             }, 10);
             // Changer la couleur de l'ECG en fonction de la fréquence
-            document.documentElement.style.setProperty('--ecg-line-color', randomFreq > 80 ? 'var(--accent-color)' : 'var(--secondary-color)');
+            const color = randomFreq > 80 ? 'var(--accent-color)' : 'var(--secondary-color)';
             // Ajuster la vitesse de l'animation ECG
-            const newDuration = randomFreq > 80 ? '1s' : '2s';
-            document.documentElement.style.setProperty('--animation-duration', newDuration);
+            const dur = randomFreq > 80 ? 1 : 2;
             // Ajouter une nouvelle onde ECG
-            addEcgLine();
+            addEcgWave(getComputedStyle(document.documentElement).getPropertyValue(color), dur, randomFreq);
             // Cacher après l'animation
             setTimeout(() => {
                 freqDisplay.style.display = 'none';
