@@ -26,7 +26,6 @@
             overflow-x: hidden;
         }
 
-        /* Grille ECG de fond */
         .ecg-grid {
             position: fixed;
             inset: 0;
@@ -38,7 +37,6 @@
             z-index: -2;
         }
 
-        /* Conteneur des ondes ECG */
         #ecg-container {
             position: fixed;
             inset: 0;
@@ -56,7 +54,6 @@
             transform: translateY(-50%);
         }
 
-        /* Fréquence popup */
         #freq-popup {
             position: fixed;
             bottom: 20px;
@@ -75,7 +72,6 @@
             z-index: 100;
         }
 
-        /* Contenu principal */
         header {
             background: linear-gradient(135deg, #004080, #006699);
             padding: 60px 20px 40px;
@@ -202,17 +198,8 @@
 </footer>
 
 <script>
-// Forme PQRST plus réaliste
-const QRS_PATH = `
-    M 0,90 
-    L 40,90              // ligne isoélectrique
-    Q 55,75 70,90        // petite onde P
-    L 120,90 
-    L 130,92 L 138,60 L 146,120 L 154,55 L 162,90   // QRS complexe
-    L 220,90 
-    Q 260,110 300,90     // onde T
-    L 400,90             // ligne iso jusqu'au prochain battement
-`;
+// Chemin SVG corrigé – SANS commentaires à l'intérieur !
+const QRS_PATH = "M0,90 L40,90 Q55,75 70,90 L120,90 L130,92 L138,60 L146,120 L154,55 L162,90 L220,90 Q260,110 300,90 L500,90";
 
 function createTrace(color = "var(--ecg-green)", speed = 8) {
     const container = document.getElementById("ecg-container");
@@ -221,12 +208,12 @@ function createTrace(color = "var(--ecg-green)", speed = 8) {
     trace.className = "ecg-trace";
     
     trace.innerHTML = `
-        <svg viewBox="0 0 400 180" preserveAspectRatio="none" width="100%" height="100%">
+        <svg viewBox="0 0 500 180" preserveAspectRatio="none" width="100%" height="100%">
             <path 
                 d="${QRS_PATH}" 
                 fill="none" 
                 stroke="${color}" 
-                stroke-width="2.2" 
+                stroke-width="2.4" 
                 stroke-linecap="round"
             />
         </svg>
@@ -234,42 +221,39 @@ function createTrace(color = "var(--ecg-green)", speed = 8) {
 
     container.appendChild(trace);
 
-    // Animation de défilement
+    // Animation fluide de gauche à droite
     trace.animate([
-        { transform: "translateX(-25%)" },
-        { transform: "translateX(-100%)" }
+        { transform: "translateX(0%)" },
+        { transform: "translateX(-66.66%)" }   // défile jusqu'à ce que le tracé soit sorti
     ], {
         duration: speed * 1000,
         easing: "linear",
         fill: "forwards"
     });
 
-    // Nettoyage
-    setTimeout(() => trace.remove(), speed * 1000 + 500);
+    setTimeout(() => trace.remove(), speed * 1000 + 800);
 }
 
 let autoInterval;
 
-// Battements automatiques
 function startAutoBeats() {
-    createTrace(); // premier battement immédiat
+    createTrace(); // premier battement
     
     autoInterval = setInterval(() => {
         const bpm = Math.floor(Math.random() * 30) + 65; // 65–95 bpm
         const fast = bpm > 82;
         const col = fast ? "var(--ecg-red)" : "var(--ecg-green)";
-        const spd = fast ? 5.5 : 8.5; // plus rapide si tachycardie
+        const spd = fast ? 5.5 : 8.5;
         
         createTrace(col, spd);
-    }, 3800); // ~ tous les 3.8s → rythme réaliste
+    }, 4200); // ~ rythme naturel
 }
 
-// Clic → battement supplémentaire + popup fréquence
+// Clic → battement bonus + popup
 document.body.addEventListener("click", (e) => {
-    // Ignorer les clics sur les boutons / inputs / liens
-    if (e.target.closest("button, input, a, textarea")) return;
+    if (e.target.closest("button, input, a, textarea, form")) return;
 
-    const bpm = Math.floor(Math.random() * 45) + 55; // 55–100
+    const bpm = Math.floor(Math.random() * 45) + 55;
     const fast = bpm > 82;
     const color = fast ? "var(--ecg-red)" : "var(--ecg-green)";
     const speed = fast ? 5 : 9;
@@ -282,7 +266,7 @@ document.body.addEventListener("click", (e) => {
     setTimeout(() => popup.style.opacity = 0, 3400);
 });
 
-// Démarrage automatique des ondes
+// Lancement
 startAutoBeats();
 </script>
 </body>
