@@ -4,14 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>CHL Recrutement</title>
+<title>Recrutement - Centre Hospitalier de Liège</title>
 
 <style>
 
 :root{
---bg:#071821;
---grid:rgba(0,255,170,0.07);
---ecg:#00ffa2;
+--primary:#0066cc;
+--secondary:#00aa66;
+--bg:#081a24;
+--grid:rgba(0,255,180,0.07);
 }
 
 *{
@@ -22,14 +23,40 @@ box-sizing:border-box;
 
 body{
 
-font-family:system-ui;
-background:var(--bg);
-color:#e6f7ff;
+font-family:system-ui,sans-serif;
+color:#e0f0ff;
+min-height:100vh;
 overflow-x:hidden;
+
+/* GIF ECG */
+
+background-image:url("https://images.steamusercontent.com/ugc/970975681534960830/09F0C2E235FD3896C1DD295AC4D1A13C3DC50457/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false");
+
+background-size:cover;
+background-position:center;
+background-repeat:no-repeat;
+background-attachment:fixed;
 
 }
 
-/* GRID ECG */
+/* couche sombre pour lisibilité */
+
+body::before{
+
+content:"";
+
+position:fixed;
+inset:0;
+
+background:rgba(5,20,30,0.75);
+
+backdrop-filter:blur(2px);
+
+z-index:-1;
+
+}
+
+/* grille ECG */
 
 .ecg-grid{
 
@@ -37,116 +64,44 @@ position:fixed;
 inset:0;
 
 background-image:
+
 linear-gradient(to bottom,transparent 0,transparent 19px,var(--grid) 19px,var(--grid) 20px),
+
 linear-gradient(to right,transparent 0,transparent 19px,var(--grid) 19px,var(--grid) 20px);
 
 background-size:20px 20px;
 
-z-index:-3;
-
-}
-
-/* MONITEUR */
-
-.ecg-monitor{
-
-position:fixed;
-
-top:50%;
-left:0;
-
-width:100%;
-height:160px;
-
-transform:translateY(-50%);
-
-overflow:hidden;
+pointer-events:none;
 
 z-index:-2;
 
 }
 
-/* STRIP */
-
-.ecg-strip{
-
-position:absolute;
-
-display:flex;
-
-width:400%;
-
-height:100%;
-
-animation:scroll 12s linear infinite;
-
-will-change:transform;
-
-}
-
-/* animation */
-
-@keyframes scroll{
-
-0%{
-transform:translate3d(0,0,0);
-}
-
-100%{
-transform:translate3d(-50%,0,0);
-}
-
-}
-
-/* SVG */
-
-.ecg-svg{
-
-width:25%;
-height:100%;
-
-}
-
-/* PATH ECG */
-
-.ecg-path{
-
-fill:none;
-
-stroke:var(--ecg);
-
-stroke-width:3.2;
-
-stroke-linecap:round;
-
-stroke-linejoin:round;
-
-/* glow */
-
-filter:
-drop-shadow(0 0 3px #00ffa2)
-drop-shadow(0 0 8px #00ffa2)
-drop-shadow(0 0 18px #00ffa2);
-
-}
-
-/* CONTENU */
+/* HEADER */
 
 header{
 
 background:linear-gradient(135deg,#004080,#006699);
 
-padding:60px 20px;
+padding:60px 20px 40px;
 
 text-align:center;
+
+box-shadow:0 10px 40px rgba(0,0,0,0.5);
 
 }
 
 header h1{
 
-font-size:2.6rem;
+font-size:2.8rem;
+
+margin-bottom:10px;
+
+text-shadow:0 4px 10px rgba(0,0,0,0.7);
 
 }
+
+/* MAIN */
 
 main{
 
@@ -158,29 +113,39 @@ padding:0 20px;
 
 }
 
+/* sections */
+
 section{
 
-background:rgba(255,255,255,0.06);
+background:rgba(10,30,40,0.65);
 
-backdrop-filter:blur(10px);
+backdrop-filter:blur(8px);
 
-border:1px solid rgba(255,255,255,0.15);
+border:1px solid rgba(255,255,255,0.12);
 
 border-radius:16px;
 
 padding:32px;
 
-margin:30px 0;
+margin:32px 0;
+
+box-shadow:0 10px 40px rgba(0,0,0,0.6);
 
 }
 
 h2{
 
-color:#00ffd0;
+color:#00ffcc;
 
-margin-bottom:18px;
+margin-bottom:1.2em;
+
+border-bottom:2px solid rgba(0,255,204,0.3);
+
+padding-bottom:.6em;
 
 }
+
+/* liste */
 
 ul{
 
@@ -190,25 +155,27 @@ list-style:none;
 
 li{
 
-background:rgba(0,0,0,0.25);
-
-padding:16px;
+background:rgba(0,0,0,0.35);
 
 margin:12px 0;
 
+padding:16px;
+
 border-radius:10px;
 
-transition:0.25s;
+transition:all .25s;
 
 }
 
 li:hover{
 
-background:rgba(0,200,120,0.25);
+background:rgba(0,180,120,0.3);
 
-transform:translateX(6px);
+transform:translateX(8px);
 
 }
+
+/* formulaire */
 
 form{
 
@@ -222,13 +189,15 @@ input,textarea{
 
 padding:14px;
 
-background:rgba(255,255,255,0.06);
-
 border:1px solid #004466;
 
 border-radius:8px;
 
+background:rgba(255,255,255,0.05);
+
 color:white;
+
+font-size:1rem;
 
 }
 
@@ -236,17 +205,19 @@ button{
 
 background:#00aa66;
 
+color:white;
+
 border:none;
 
 padding:16px;
 
+font-size:1.1rem;
+
 border-radius:10px;
 
-font-size:1.05rem;
-
-color:white;
-
 cursor:pointer;
+
+transition:.3s;
 
 }
 
@@ -254,15 +225,23 @@ button:hover{
 
 background:#00cc88;
 
+transform:translateY(-2px);
+
+box-shadow:0 8px 20px rgba(0,200,120,0.4);
+
 }
+
+/* footer */
 
 footer{
 
 text-align:center;
 
-padding:40px;
+padding:40px 20px;
 
 color:#88aacc;
+
+font-size:.9rem;
 
 }
 
@@ -272,89 +251,6 @@ color:#88aacc;
 <body>
 
 <div class="ecg-grid"></div>
-
-<div class="ecg-monitor">
-
-<div class="ecg-strip">
-
-<!-- ECG 1 -->
-<svg class="ecg-svg" viewBox="0 0 1600 160">
-
-<path class="ecg-path" d="
-
-M0 80
-L100 80
-
-Q120 70 140 80
-
-L200 80
-
-L230 90
-L240 60
-L250 120
-L260 40
-L270 80
-
-L420 80
-
-Q440 70 460 80
-
-L520 80
-
-L550 90
-L560 60
-L570 120
-L580 40
-L590 80
-
-L740 80
-
-Q760 70 780 80
-
-L840 80
-
-L870 90
-L880 60
-L890 120
-L900 40
-L910 80
-
-L1060 80
-
-Q1080 70 1100 80
-
-L1160 80
-
-L1190 90
-L1200 60
-L1210 120
-L1220 40
-L1230 80
-
-L1600 80
-
-"/>
-
-</svg>
-
-<!-- copie 2 -->
-<svg class="ecg-svg" viewBox="0 0 1600 160">
-<use href="#"/>
-</svg>
-
-<!-- copie 3 -->
-<svg class="ecg-svg" viewBox="0 0 1600 160">
-<use href="#"/>
-</svg>
-
-<!-- copie 4 -->
-<svg class="ecg-svg" viewBox="0 0 1600 160">
-<use href="#"/>
-</svg>
-
-</div>
-
-</div>
 
 <header>
 
@@ -368,19 +264,19 @@ L1600 80
 
 <section>
 
-<h2>Postes ouverts</h2>
+<h2>Postes ouverts actuellement</h2>
 
 <ul>
 
 <li>Infirmier(ère) – Urgences & Soins Intensifs</li>
 
-<li>Médecin spécialiste – Cardiologie</li>
+<li>Médecin spécialiste – Cardiologie / Radiologie</li>
 
-<li>Technicien(ne) laboratoire</li>
+<li>Technicien(ne) de laboratoire – Hématologie / Biochimie</li>
 
-<li>Assistant RH</li>
+<li>Assistant administratif – Service RH</li>
 
-<li>Kinésithérapeute</li>
+<li>Kinésithérapeute – Rééducation neurologique</li>
 
 </ul>
 
@@ -398,7 +294,7 @@ L1600 80
 
 <input type="text" placeholder="Poste visé" required>
 
-<textarea rows="5" placeholder="Motivation / CV"></textarea>
+<textarea rows="5" placeholder="Motivation / CV ou lien LinkedIn"></textarea>
 
 <button type="submit">Envoyer ma candidature</button>
 
@@ -410,7 +306,7 @@ L1600 80
 
 <footer>
 
-© 2026 – Centre Hospitalier de Liège
+© 2026 – Centre Hospitalier de Liège – Tous droits réservés
 
 </footer>
 
