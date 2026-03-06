@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recrutement - Centre Hospitalier de Liège (CHL)</title>
+    <style>
+        /* CSS Hyper sophistiqué */
+        :root {
+            --primary-color: #007bff; /* Bleu hospitalier */
+            --secondary-color: #28a745; /* Vert santé */
+            --accent-color: #dc3545; /* Rouge alerte pour ECG */
+            --bg-color: #f8f9fa; /* Fond clair */
+            --text-color: #212529; /* Texte sombre */
+            --ecg-line-color: #28a745; /* Vert ECG par défaut */
+            --ecg-grid-color: rgba(0, 0, 0, 0.1); /* Grille ECG */
+            --animation-duration: 2s; /* Durée de l'animation ECG */
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Fond ECG sophistiqué */
+        .ecg-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                repeating-linear-gradient(to bottom, transparent 0, transparent 4px, var(--ecg-grid-color) 4px, var(--ecg-grid-color) 5px),
+                repeating-linear-gradient(to right, transparent 0, transparent 4px, var(--ecg-grid-color) 4px, var(--ecg-grid-color) 5px);
+            background-size: 5px 5px;
+            z-index: -1;
+            opacity: 0.2;
+        }
+
+        .ecg-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: transparent;
+            overflow: hidden;
+        }
+
+        .ecg-line::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 100%;
+            background: 
+                linear-gradient(to right,
+                    transparent 0%,
+                    var(--ecg-line-color) 0%,
+                    var(--ecg-line-color) 2%,
+                    transparent 2%,
+                    transparent 10%,
+                    var(--ecg-line-color) 10%,
+                    var(--ecg-line-color) 12%,
+                    transparent 12%,
+                    transparent 20%,
+                    var(--ecg-line-color) 20%,
+                    var(--ecg-line-color) 22%,
+                    transparent 22%,
+                    transparent 30%,
+                    var(--ecg-line-color) 30%,
+                    var(--ecg-line-color) 50%,
+                    transparent 50%,
+                    transparent 60%,
+                    var(--ecg-line-color) 60%,
+                    var(--ecg-line-color) 62%,
+                    transparent 62%,
+                    transparent 70%,
+                    var(--ecg-line-color) 70%,
+                    var(--ecg-line-color) 72%,
+                    transparent 72%,
+                    transparent 80%,
+                    var(--ecg-line-color) 80%,
+                    var(--ecg-line-color) 82%,
+                    transparent 82%,
+                    transparent 100%
+                );
+            animation: ecg-animate var(--animation-duration) linear infinite;
+        }
+
+        @keyframes ecg-animate {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Fréquence qui apparaît sur clic */
+        .frequency-display {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            font-size: 1.2em;
+            font-weight: bold;
+            color: var(--accent-color);
+            display: none;
+            z-index: 10;
+            animation: fadeInOut 3s ease-in-out;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        /* Header sophistiqué */
+        header {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            animation: pulse 5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Sections */
+        section {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        section:hover {
+            transform: translateY(-5px);
+        }
+
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background: var(--bg-color);
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: background 0.3s;
+        }
+
+        li:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Formulaire sophistiqué */
+        form {
+            display: grid;
+            gap: 15px;
+        }
+
+        input, textarea {
+            padding: 10px;
+            border: 1px solid var(--primary-color);
+            border-radius: 5px;
+            transition: border 0.3s;
+        }
+
+        input:focus, textarea:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+        }
+
+        button {
+            background: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        button:hover {
+            background: var(--secondary-color);
+            transform: scale(1.05);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body onclick="showFrequency()">
+    <div class="ecg-background"></div>
+    <div class="ecg-line"></div>
+    <div class="frequency-display" id="frequency">Fréquence cardiaque : 72 bpm</div>
+
+    <header>
+        <h1>Recrutement au Centre Hospitalier de Liège (CHL)</h1>
+        <p>Rejoignez notre équipe dédiée à la santé et au bien-être des patients.</p>
+    </header>
+
+    <section id="offres">
+        <h2>Offres d'Emploi Disponibles</h2>
+        <ul>
+            <li><strong>Infirmier(ère)</strong> - Temps plein, service des urgences.</li>
+            <li><strong>Médecin Spécialiste</strong> - Cardiologie, expérience requise.</li>
+            <li><strong>Technicien de Laboratoire</strong> - Analyse médicale, CDD.</li>
+            <li><strong>Assistant Administratif</strong> - Gestion des dossiers patients.</li>
+        </ul>
+    </section>
+
+    <section id="candidature">
+        <h2>Postuler</h2>
+        <form>
+            <label for="nom">Nom :</label>
+            <input type="text" id="nom" name="nom" required>
+
+            <label for="email">Email :</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="poste">Poste Souhaité :</label>
+            <input type="text" id="poste" name="poste" required>
+
+            <label for="cv">Message / CV :</label>
+            <textarea id="cv" name="cv" rows="5" required></textarea>
+
+            <button type="submit">Envoyer Candidature</button>
+        </form>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Centre Hospitalier de Liège. Tous droits réservés.</p>
+    </footer>
+
+    <script>
+        function showFrequency() {
+            const freqDisplay = document.getElementById('frequency');
+            // Générer une fréquence aléatoire entre 60 et 100 bpm
+            const randomFreq = Math.floor(Math.random() * 41) + 60;
+            freqDisplay.textContent = `Fréquence cardiaque : ${randomFreq} bpm`;
+            freqDisplay.style.display = 'block';
+            // Réinitialiser l'animation pour qu'elle recommence
+            freqDisplay.style.animation = 'none';
+            setTimeout(() => {
+                freqDisplay.style.animation = 'fadeInOut 3s ease-in-out';
+            }, 10);
+            // Changer la couleur de l'ECG en fonction de la fréquence
+            document.documentElement.style.setProperty('--ecg-line-color', randomFreq > 80 ? 'var(--accent-color)' : 'var(--secondary-color)');
+            // Ajuster la vitesse de l'animation ECG
+            const newDuration = randomFreq > 80 ? '1s' : '2s';
+            document.documentElement.style.setProperty('--animation-duration', newDuration);
+            // Cacher après l'animation
+            setTimeout(() => {
+                freqDisplay.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
