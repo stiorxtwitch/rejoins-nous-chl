@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Recrutement - CHL</title>
+<title>CHL Recrutement</title>
 
 <style>
 
 :root{
---bg:#0a1f2e;
---grid:rgba(0,255,180,0.08);
---ecg:#00ff9c;
+--bg:#071821;
+--grid:rgba(0,255,170,0.07);
+--ecg:#00ffa2;
 }
 
 *{
@@ -21,15 +21,18 @@ box-sizing:border-box;
 }
 
 body{
-font-family:system-ui,sans-serif;
+
+font-family:system-ui;
 background:var(--bg);
-color:#e0f0ff;
+color:#e6f7ff;
 overflow-x:hidden;
+
 }
 
-/* grille ECG */
+/* GRID ECG */
 
 .ecg-grid{
+
 position:fixed;
 inset:0;
 
@@ -38,161 +41,229 @@ linear-gradient(to bottom,transparent 0,transparent 19px,var(--grid) 19px,var(--
 linear-gradient(to right,transparent 0,transparent 19px,var(--grid) 19px,var(--grid) 20px);
 
 background-size:20px 20px;
-z-index:-2;
+
+z-index:-3;
+
 }
 
-/* écran ECG */
+/* MONITEUR */
 
 .ecg-monitor{
 
 position:fixed;
+
 top:50%;
 left:0;
 
 width:100%;
-height:180px;
+height:160px;
 
 transform:translateY(-50%);
+
 overflow:hidden;
 
-z-index:-1;
+z-index:-2;
 
 }
 
-/* bande ECG */
+/* STRIP */
 
 .ecg-strip{
 
+position:absolute;
+
 display:flex;
-width:200%;
+
+width:400%;
+
 height:100%;
 
-animation:scroll 8s linear infinite;
+animation:scroll 12s linear infinite;
+
+will-change:transform;
 
 }
 
-/* animation continue */
+/* animation */
 
 @keyframes scroll{
 
 0%{
-transform:translateX(0);
+transform:translate3d(0,0,0);
 }
 
 100%{
-transform:translateX(-50%);
+transform:translate3d(-50%,0,0);
 }
 
 }
 
-/* svg */
+/* SVG */
 
-.ecg-strip svg{
+.ecg-svg{
 
-width:50%;
+width:25%;
 height:100%;
 
 }
 
-/* tracé ECG */
+/* PATH ECG */
 
 .ecg-path{
 
 fill:none;
+
 stroke:var(--ecg);
+
 stroke-width:3.2;
 
 stroke-linecap:round;
+
 stroke-linejoin:round;
 
-/* glow médical */
+/* glow */
 
 filter:
-drop-shadow(0 0 4px #00ff88)
-drop-shadow(0 0 8px #00ff88)
-drop-shadow(0 0 16px #00ffaa);
+drop-shadow(0 0 3px #00ffa2)
+drop-shadow(0 0 8px #00ffa2)
+drop-shadow(0 0 18px #00ffa2);
 
 }
 
-/* contenu site */
+/* CONTENU */
 
 header{
+
 background:linear-gradient(135deg,#004080,#006699);
-padding:60px 20px 40px;
+
+padding:60px 20px;
+
 text-align:center;
+
 }
 
 header h1{
-font-size:2.8rem;
-margin-bottom:12px;
+
+font-size:2.6rem;
+
 }
 
 main{
+
 max-width:1100px;
+
 margin:40px auto;
+
 padding:0 20px;
+
 }
 
 section{
-background:rgba(255,255,255,0.07);
+
+background:rgba(255,255,255,0.06);
+
 backdrop-filter:blur(10px);
-border:1px solid rgba(255,255,255,0.12);
+
+border:1px solid rgba(255,255,255,0.15);
+
 border-radius:16px;
+
 padding:32px;
-margin:32px 0;
+
+margin:30px 0;
+
 }
 
 h2{
-color:#00ffcc;
-margin-bottom:1.2em;
-border-bottom:2px solid rgba(0,255,204,0.3);
-padding-bottom:.6em;
+
+color:#00ffd0;
+
+margin-bottom:18px;
+
 }
 
-ul{list-style:none;}
+ul{
+
+list-style:none;
+
+}
 
 li{
-background:rgba(0,0,0,0.2);
-margin:12px 0;
+
+background:rgba(0,0,0,0.25);
+
 padding:16px;
+
+margin:12px 0;
+
 border-radius:10px;
-transition:.25s;
+
+transition:0.25s;
+
 }
 
 li:hover{
-background:rgba(0,180,120,0.25);
-transform:translateX(8px);
+
+background:rgba(0,200,120,0.25);
+
+transform:translateX(6px);
+
 }
 
 form{
+
 display:grid;
+
 gap:16px;
+
 }
 
 input,textarea{
+
 padding:14px;
+
+background:rgba(255,255,255,0.06);
+
 border:1px solid #004466;
+
 border-radius:8px;
-background:rgba(255,255,255,0.05);
+
 color:white;
-font-size:1.05rem;
+
 }
 
 button{
+
 background:#00aa66;
-color:white;
+
 border:none;
+
 padding:16px;
-font-size:1.1rem;
+
 border-radius:10px;
+
+font-size:1.05rem;
+
+color:white;
+
 cursor:pointer;
+
+}
+
+button:hover{
+
+background:#00cc88;
+
 }
 
 footer{
+
 text-align:center;
-padding:40px 20px;
+
+padding:40px;
+
 color:#88aacc;
-font-size:.9rem;
+
 }
 
 </style>
@@ -207,115 +278,78 @@ font-size:.9rem;
 <div class="ecg-strip">
 
 <!-- ECG 1 -->
-
-<svg viewBox="0 0 1200 180">
+<svg class="ecg-svg" viewBox="0 0 1600 160">
 
 <path class="ecg-path" d="
 
-M0 90
-L120 90
-Q150 75 180 90
-L220 90
+M0 80
+L100 80
 
-L250 95
-L260 60
-L270 120
-L280 40
-L290 90
+Q120 70 140 80
 
-L400 90
+L200 80
 
-Q430 75 460 90
-L500 90
+L230 90
+L240 60
+L250 120
+L260 40
+L270 80
 
-L530 95
-L540 60
-L550 120
-L560 40
-L570 90
+L420 80
 
-L680 90
+Q440 70 460 80
 
-Q710 75 740 90
-L780 90
+L520 80
 
-L810 95
-L820 60
-L830 120
-L840 40
-L850 90
+L550 90
+L560 60
+L570 120
+L580 40
+L590 80
 
-L960 90
+L740 80
 
-Q990 75 1020 90
-L1060 90
+Q760 70 780 80
 
-L1090 95
-L1100 60
-L1110 120
-L1120 40
-L1130 90
+L840 80
 
-L1200 90
+L870 90
+L880 60
+L890 120
+L900 40
+L910 80
+
+L1060 80
+
+Q1080 70 1100 80
+
+L1160 80
+
+L1190 90
+L1200 60
+L1210 120
+L1220 40
+L1230 80
+
+L1600 80
 
 "/>
 
 </svg>
 
-<!-- ECG 2 (copie pour boucle parfaite) -->
+<!-- copie 2 -->
+<svg class="ecg-svg" viewBox="0 0 1600 160">
+<use href="#"/>
+</svg>
 
-<svg viewBox="0 0 1200 180">
+<!-- copie 3 -->
+<svg class="ecg-svg" viewBox="0 0 1600 160">
+<use href="#"/>
+</svg>
 
-<path class="ecg-path" d="
-
-M0 90
-L120 90
-Q150 75 180 90
-L220 90
-
-L250 95
-L260 60
-L270 120
-L280 40
-L290 90
-
-L400 90
-
-Q430 75 460 90
-L500 90
-
-L530 95
-L540 60
-L550 120
-L560 40
-L570 90
-
-L680 90
-
-Q710 75 740 90
-L780 90
-
-L810 95
-L820 60
-L830 120
-L840 40
-L850 90
-
-L960 90
-
-Q990 75 1020 90
-L1060 90
-
-L1090 95
-L1100 60
-L1110 120
-L1120 40
-L1130 90
-
-L1200 90
-
-"/>
-
+<!-- copie 4 -->
+<svg class="ecg-svg" viewBox="0 0 1600 160">
+<use href="#"/>
 </svg>
 
 </div>
@@ -323,21 +357,31 @@ L1200 90
 </div>
 
 <header>
+
 <h1>Recrutement CHL – Centre Hospitalier de Liège</h1>
+
 <p>Rejoignez une équipe qui fait battre le cœur de la région</p>
+
 </header>
 
 <main>
 
 <section>
-<h2>Postes ouverts actuellement</h2>
+
+<h2>Postes ouverts</h2>
 
 <ul>
+
 <li>Infirmier(ère) – Urgences & Soins Intensifs</li>
-<li>Médecin spécialiste – Cardiologie / Radiologie</li>
-<li>Technicien(ne) de laboratoire – Hématologie</li>
-<li>Assistant administratif – Ressources humaines</li>
-<li>Kinésithérapeute – Rééducation neurologique</li>
+
+<li>Médecin spécialiste – Cardiologie</li>
+
+<li>Technicien(ne) laboratoire</li>
+
+<li>Assistant RH</li>
+
+<li>Kinésithérapeute</li>
+
 </ul>
 
 </section>
@@ -354,7 +398,7 @@ L1200 90
 
 <input type="text" placeholder="Poste visé" required>
 
-<textarea rows="5" placeholder="Motivation ou CV"></textarea>
+<textarea rows="5" placeholder="Motivation / CV"></textarea>
 
 <button type="submit">Envoyer ma candidature</button>
 
