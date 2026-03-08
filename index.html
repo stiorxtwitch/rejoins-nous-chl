@@ -1,16 +1,23 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Recrutement CHL</title>
+<title>Recrutement - Centre Hospitalier de Liège</title>
+
+<!-- OPEN GRAPH PREVIEW -->
+<meta property="og:title" content="Recrutement - Centre Hospitalier de Liège">
+<meta property="og:description" content="Rejoignez une équipe médicale qui fait battre le cœur de la région. Découvrez les postes ouverts au Centre Hospitalier de Liège.">
+<meta property="og:image" content="https://images.steamusercontent.com/ugc/970975681534960830/09F0C2E235FD3896C1DD295AC4D1A13C3DC50457/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fr_FR">
 
 <style>
 
 :root{
 --accent:#00ffaa;
---bg:#081a24;
 }
 
 *{
@@ -20,6 +27,7 @@ box-sizing:border-box;
 }
 
 body{
+
 font-family:system-ui;
 color:#e6f7ff;
 min-height:100vh;
@@ -27,6 +35,7 @@ min-height:100vh;
 background-image:url("https://i.pinimg.com/originals/89/e4/b6/89e4b6a49573b915b7f0d773fe1ef1de.gif");
 background-size:cover;
 background-attachment:fixed;
+
 }
 
 body::before{
@@ -37,13 +46,13 @@ background:rgba(5,20,30,0.88);
 z-index:-1;
 }
 
-/* HEADER */
-
 header{
+
 text-align:center;
 padding:60px;
+
 background:linear-gradient(135deg,#004080,#006699);
-box-shadow:0 10px 30px rgba(0,0,0,0.6);
+
 }
 
 main{
@@ -53,10 +62,11 @@ padding:40px 20px;
 }
 
 section{
+
 background:rgba(10,30,40,0.85);
 padding:35px;
 border-radius:14px;
-box-shadow:0 10px 30px rgba(0,0,0,0.6);
+
 }
 
 h2{
@@ -72,16 +82,18 @@ color:var(--accent);
 /* GRID */
 
 .grid{
+
 display:grid;
 grid-template-columns:repeat(2,1fr);
 gap:18px;
+
 }
 
 .full{
 grid-column:1/-1;
 }
 
-/* INPUTS */
+/* INPUT */
 
 input,textarea,select{
 
@@ -96,39 +108,36 @@ background:rgba(255,255,255,0.06);
 color:white;
 font-size:15px;
 
-transition:0.2s;
 }
 
 input:focus,
 textarea:focus,
 select:focus{
+
 outline:none;
 border-color:#00ffaa;
-box-shadow:0 0 8px rgba(0,255,170,0.4);
+
 }
 
-/* CORRECTION SELECT */
+/* FIX SELECT */
 
 select option{
 color:black;
 background:white;
 }
 
-/* TEXTAREA */
-
 textarea{
+
 resize:vertical;
 min-height:90px;
-}
 
-/* BUTTON */
+}
 
 button{
 
 padding:16px;
 
 background:#00aa66;
-
 border:none;
 
 border-radius:10px;
@@ -139,36 +148,38 @@ color:white;
 
 cursor:pointer;
 
-transition:0.2s;
+margin-top:20px;
 
-margin-top:15px;
 }
 
 button:hover{
 background:#00cc88;
-transform:translateY(-2px);
 }
-
-/* HIDDEN */
 
 .hidden{
 display:none;
 }
 
 footer{
+
 text-align:center;
 padding:40px;
+
 color:#88aacc;
+
 }
 
 </style>
+
 </head>
 
 <body>
 
 <header>
+
 <h1>Recrutement – Centre Hospitalier de Liège</h1>
 <p>Rejoignez une équipe qui fait battre le cœur de la région</p>
+
 </header>
 
 <main>
@@ -241,10 +252,12 @@ color:#88aacc;
 <h3>Expérience médicale IRL</h3>
 
 <select id="experienceMedicale">
+
 <option value="aucune">Aucune</option>
 <option value="legere">Légère connaissance</option>
 <option value="bonne">Bonne connaissance</option>
 <option value="pratiquant">Pratiquant</option>
+
 </select>
 
 
@@ -253,10 +266,12 @@ color:#88aacc;
 <h3>Domaine pratiqué</h3>
 
 <select id="metierMedical">
+
 <option value="">Choisir</option>
 <option value="medecin">Médecin</option>
 <option value="infirmier">Infirmier</option>
 <option value="kine">Kinésithérapeute</option>
+
 </select>
 
 </div>
@@ -329,10 +344,17 @@ color:#88aacc;
 <option>Rigolade</option>
 </select>
 
-<label>
-<input type="checkbox">
- Je prends en compte la formation afin d'intégrer le CHL
-</label>
+<div class="grid">
+
+<label>Prenez-vous en compte la formation afin d'intégrer le CHL ?</label>
+
+<select>
+<option value="">Choisir</option>
+<option>Oui</option>
+<option>Non</option>
+</select>
+
+</div>
 
 <button type="submit">Envoyer ma candidature</button>
 
@@ -343,13 +365,12 @@ color:#88aacc;
 </main>
 
 <footer>
+
 © 2026 – Centre Hospitalier de Liège
+
 </footer>
 
-
 <script>
-
-/* EXPERIENCE PASSEE */
 
 const experiencePasse = document.getElementById("experiencePasse");
 const experienceBox = document.getElementById("experienceBox");
@@ -363,8 +384,6 @@ experienceBox.classList.add("hidden");
 }
 
 });
-
-/* EXPERIENCE MEDICALE */
 
 const experienceMedicale = document.getElementById("experienceMedicale");
 const pratiquantSection = document.getElementById("pratiquantSection");
@@ -381,8 +400,6 @@ kineBox.classList.add("hidden");
 }
 
 });
-
-/* METIER */
 
 const metierMedical = document.getElementById("metierMedical");
 
