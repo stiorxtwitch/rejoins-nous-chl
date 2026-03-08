@@ -9,9 +9,7 @@
 <style>
 
 :root{
---primary:#0066cc;
---secondary:#00ffaa;
---grid:rgba(0,255,180,0.07);
+--accent:#00ffaa;
 }
 
 *{
@@ -22,12 +20,11 @@ box-sizing:border-box;
 
 body{
 font-family:system-ui;
-color:#e0f0ff;
+color:#e6f7ff;
 min-height:100vh;
 
 background-image:url("https://i.pinimg.com/originals/89/e4/b6/89e4b6a49573b915b7f0d773fe1ef1de.gif");
 background-size:cover;
-background-position:center;
 background-attachment:fixed;
 }
 
@@ -35,13 +32,13 @@ body::before{
 content:"";
 position:fixed;
 inset:0;
-background:rgba(5,20,30,0.8);
+background:rgba(5,20,30,0.85);
 z-index:-1;
 }
 
 header{
 text-align:center;
-padding:60px 20px;
+padding:60px;
 background:linear-gradient(135deg,#004080,#006699);
 }
 
@@ -52,38 +49,35 @@ padding:30px;
 }
 
 section{
-background:rgba(10,30,40,0.75);
+background:rgba(10,30,40,0.8);
 padding:35px;
-border-radius:14px;
+border-radius:15px;
 }
 
 h2{
-color:#00ffcc;
+color:var(--accent);
 margin-bottom:25px;
 }
 
 h3{
-color:#00ffaa;
-margin-top:25px;
-margin-bottom:10px;
+margin:25px 0 10px;
+color:var(--accent);
 }
 
-form{
-display:flex;
-flex-direction:column;
-gap:20px;
+/* STRUCTURE */
+
+.form-section{
+margin-bottom:30px;
 }
 
-/* GRILLE FORMULAIRE */
-
-.form-grid{
+.grid{
 display:grid;
 grid-template-columns:repeat(2,1fr);
 gap:18px;
 }
 
 .full{
-grid-column:1/-1;
+grid-column:1 / -1;
 }
 
 /* INPUT */
@@ -100,15 +94,10 @@ font-size:15px;
 
 textarea{
 resize:vertical;
-min-height:80px;
+min-height:90px;
 }
 
-label{
-font-size:14px;
-opacity:0.8;
-}
-
-/* BOUTON */
+/* BUTTON */
 
 button{
 padding:16px;
@@ -118,15 +107,13 @@ border-radius:10px;
 font-size:16px;
 color:white;
 cursor:pointer;
-transition:0.2s;
 }
 
 button:hover{
 background:#00cc88;
-transform:translateY(-2px);
 }
 
-/* SECTIONS CACHÉES */
+/* HIDDEN */
 
 .hidden{
 display:none;
@@ -144,10 +131,8 @@ color:#88aacc;
 <body>
 
 <header>
-
 <h1>Recrutement – Centre Hospitalier de Liège</h1>
 <p>Rejoignez une équipe qui fait battre le cœur de la région</p>
-
 </header>
 
 <main>
@@ -158,13 +143,17 @@ color:#88aacc;
 
 <form>
 
-<div class="form-grid">
+<!-- INFORMATIONS -->
 
-<input type="text" placeholder="Discord (Ex : .stirox)">
-<input type="tel" placeholder="Téléphone">
+<div class="form-section">
 
-<input type="text" placeholder="Nom">
-<input type="text" placeholder="Prénom">
+<div class="grid">
+
+<input placeholder="Discord (Ex: .stirox)">
+<input placeholder="Téléphone">
+
+<input placeholder="Nom">
+<input placeholder="Prénom">
 
 <input type="number" placeholder="Âge">
 
@@ -174,40 +163,55 @@ color:#88aacc;
 <option>Pas vierge</option>
 </select>
 
-<select id="experiencePasse">
-<option value="non">Expérience passée : Non</option>
-<option value="oui">Expérience passée : Oui</option>
-</select>
+</div>
 
 </div>
 
-<div id="expDetails" class="hidden">
+<!-- EXPERIENCE PASSEE -->
 
-<div class="form-grid">
+<div class="form-section">
+
+<h3>Expérience passée</h3>
+
+<select id="experiencePasse">
+<option value="non">Non</option>
+<option value="oui">Oui</option>
+</select>
+
+<div id="experienceDetails" class="hidden">
 
 <textarea class="full" placeholder="Quel métier / grade / raison du changement / relation avec l'équipe"></textarea>
 
 <textarea placeholder="Comment vous décririez-vous ?"></textarea>
 <textarea placeholder="Quel est votre plus gros défaut ?"></textarea>
 
-<select id="experienceIRL" class="full">
-<option value="">Expérience médicale IRL</option>
-<option value="pratiquant">Pratiquant</option>
-<option value="bonne">Bonne connaissance</option>
-<option value="legere">Légère connaissance</option>
+</div>
+
+</div>
+
+<!-- EXPERIENCE MEDICALE IRL -->
+
+<div class="form-section">
+
+<h3>Expérience médicale IRL</h3>
+
+<select id="experienceMedicale">
 <option value="aucune">Aucune</option>
+<option value="legere">Légère connaissance</option>
+<option value="bonne">Bonne connaissance</option>
+<option value="pratiquant">Pratiquant</option>
 </select>
 
 </div>
 
-</div>
+<!-- PRATIQUANT -->
 
-<div id="choixMetier" class="hidden">
+<div id="pratiquantSection" class="form-section hidden">
 
-<h3>Si Pratiquant</h3>
+<h3>Domaine pratiqué</h3>
 
 <select id="metierMedical">
-<option value="">Choisir le domaine</option>
+<option value="">Choisir</option>
 <option value="medecin">Médecin</option>
 <option value="infirmier">Infirmier</option>
 <option value="kine">Kinésithérapeute</option>
@@ -215,11 +219,13 @@ color:#88aacc;
 
 </div>
 
-<div id="medecinBox" class="hidden">
+<!-- MEDECIN -->
+
+<div id="medecinBox" class="form-section hidden">
 
 <h3>Questions Médecin</h3>
 
-<div class="form-grid">
+<div class="grid">
 
 <input placeholder="Spécialisation">
 <input placeholder="Hôpital où vous avez travaillé">
@@ -230,11 +236,13 @@ color:#88aacc;
 
 </div>
 
-<div id="infirmierBox" class="hidden">
+<!-- INFIRMIER -->
+
+<div id="infirmierBox" class="form-section hidden">
 
 <h3>Questions Infirmier</h3>
 
-<div class="form-grid">
+<div class="grid">
 
 <input placeholder="Spécialisation infirmière">
 <input placeholder="Hôpital où vous avez travaillé">
@@ -245,7 +253,9 @@ color:#88aacc;
 
 </div>
 
-<div id="kineBox" class="hidden">
+<!-- KINE -->
+
+<div id="kineBox" class="form-section hidden">
 
 <h3>Questions Kiné</h3>
 
@@ -253,7 +263,11 @@ color:#88aacc;
 
 </div>
 
-<textarea class="full" placeholder="Quelles sont vos motivations pour rejoindre le CHL ?"></textarea>
+<!-- MOTIVATION -->
+
+<div class="form-section">
+
+<textarea placeholder="Quelles sont vos motivations pour rejoindre le CHL ?"></textarea>
 
 <input placeholder="Quelle est votre citation préférée ?">
 
@@ -270,8 +284,11 @@ color:#88aacc;
 </select>
 
 <label>
-<input type="checkbox"> Je prends en compte la formation pour intégrer le CHL
+<input type="checkbox">
+Je prends en compte la formation afin d'intégrer le CHL
 </label>
+
+</div>
 
 <button type="submit">Envoyer ma candidature</button>
 
@@ -287,11 +304,40 @@ color:#88aacc;
 
 <script>
 
-const experiencePasse = document.getElementById("experiencePasse");
-const expDetails = document.getElementById("expDetails");
+/* EXPERIENCE PASSEE */
 
-const experienceIRL = document.getElementById("experienceIRL");
-const choixMetier = document.getElementById("choixMetier");
+const experiencePasse = document.getElementById("experiencePasse");
+const experienceDetails = document.getElementById("experienceDetails");
+
+experiencePasse.addEventListener("change",()=>{
+
+if(experiencePasse.value==="oui"){
+experienceDetails.classList.remove("hidden");
+}else{
+experienceDetails.classList.add("hidden");
+}
+
+});
+
+/* EXPERIENCE MEDICALE */
+
+const experienceMedicale = document.getElementById("experienceMedicale");
+const pratiquantSection = document.getElementById("pratiquantSection");
+
+experienceMedicale.addEventListener("change",()=>{
+
+if(experienceMedicale.value==="pratiquant"){
+pratiquantSection.classList.remove("hidden");
+}else{
+pratiquantSection.classList.add("hidden");
+medecinBox.classList.add("hidden");
+infirmierBox.classList.add("hidden");
+kineBox.classList.add("hidden");
+}
+
+});
+
+/* METIER */
 
 const metierMedical = document.getElementById("metierMedical");
 
@@ -299,47 +345,15 @@ const medecinBox = document.getElementById("medecinBox");
 const infirmierBox = document.getElementById("infirmierBox");
 const kineBox = document.getElementById("kineBox");
 
-experiencePasse.addEventListener("change",()=>{
-
-if(experiencePasse.value==="oui"){
-expDetails.classList.remove("hidden");
-}else{
-expDetails.classList.add("hidden");
-choixMetier.classList.add("hidden");
-}
-
-});
-
-document.addEventListener("change",(e)=>{
-
-if(e.target.id==="experienceIRL"){
-
-if(e.target.value==="pratiquant"){
-choixMetier.classList.remove("hidden");
-}else{
-choixMetier.classList.add("hidden");
-medecinBox.classList.add("hidden");
-infirmierBox.classList.add("hidden");
-kineBox.classList.add("hidden");
-}
-
-}
-
-});
-
-document.addEventListener("change",(e)=>{
-
-if(e.target.id==="metierMedical"){
+metierMedical.addEventListener("change",()=>{
 
 medecinBox.classList.add("hidden");
 infirmierBox.classList.add("hidden");
 kineBox.classList.add("hidden");
 
-if(e.target.value==="medecin") medecinBox.classList.remove("hidden");
-if(e.target.value==="infirmier") infirmierBox.classList.remove("hidden");
-if(e.target.value==="kine") kineBox.classList.remove("hidden");
-
-}
+if(metierMedical.value==="medecin") medecinBox.classList.remove("hidden");
+if(metierMedical.value==="infirmier") infirmierBox.classList.remove("hidden");
+if(metierMedical.value==="kine") kineBox.classList.remove("hidden");
 
 });
 
