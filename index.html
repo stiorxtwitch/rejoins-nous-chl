@@ -6,11 +6,6 @@
 
 <title>Recrutement - Centre Hospitalier de Liège</title>
 
-<meta property="og:title" content="Recrutement - Centre Hospitalier de Liège">
-<meta property="og:description" content="Rejoignez une équipe médicale qui fait battre le cœur de la région.">
-<meta property="og:image" content="https://www.apple.com/newsroom/fr/images/product/watch/standard/Apple-Watch-ECG-app-12062018_big.gif.large.gif">
-<meta property="og:type" content="website">
-
 <style>
 
 :root{
@@ -44,7 +39,6 @@ content:"";
 position:fixed;
 inset:0;
 background:rgba(5,20,30,0.75);
-backdrop-filter:blur(2px);
 z-index:-1;
 }
 
@@ -65,12 +59,6 @@ header{
 background:linear-gradient(135deg,#004080,#006699);
 padding:60px 20px 40px;
 text-align:center;
-box-shadow:0 10px 40px rgba(0,0,0,0.5);
-}
-
-header h1{
-font-size:2.8rem;
-margin-bottom:10px;
 }
 
 main{
@@ -81,35 +69,19 @@ padding:0 20px;
 
 section{
 background:rgba(10,30,40,0.65);
-backdrop-filter:blur(8px);
-border:1px solid rgba(255,255,255,0.12);
 border-radius:16px;
 padding:32px;
 margin:32px 0;
-box-shadow:0 10px 40px rgba(0,0,0,0.6);
 }
 
 h2{
 color:#00ffcc;
 margin-bottom:1.2em;
-border-bottom:2px solid rgba(0,255,204,0.3);
-padding-bottom:.6em;
 }
 
 h3{
 margin-top:20px;
 color:#00ffaa;
-}
-
-ul{
-list-style:none;
-}
-
-li{
-background:rgba(0,0,0,0.35);
-margin:12px 0;
-padding:16px;
-border-radius:10px;
 }
 
 form{
@@ -119,11 +91,10 @@ gap:16px;
 
 input,textarea,select{
 padding:14px;
-border:1px solid #004466;
 border-radius:8px;
+border:1px solid #004466;
 background:rgba(255,255,255,0.05);
 color:white;
-font-size:1rem;
 }
 
 button{
@@ -134,29 +105,20 @@ padding:16px;
 font-size:1.1rem;
 border-radius:10px;
 cursor:pointer;
-transition:.3s;
 }
 
 button:hover{
 background:#00cc88;
-transform:translateY(-2px);
 }
 
-label{
-margin-top:10px;
-}
-
-.checkbox{
-display:flex;
-align-items:center;
-gap:10px;
+.hidden{
+display:none;
 }
 
 footer{
 text-align:center;
 padding:40px 20px;
 color:#88aacc;
-font-size:.9rem;
 }
 
 </style>
@@ -175,32 +137,14 @@ font-size:.9rem;
 
 <section>
 
-<h2>Postes ouverts actuellement</h2>
-
-<ul>
-<li>Infirmier(ère) – Urgences & Soins Intensifs</li>
-<li>Médecin spécialiste – Cardiologie / Radiologie</li>
-<li>Technicien(ne) de laboratoire – Hématologie</li>
-<li>Assistant administratif – Service RH</li>
-<li>Kinésithérapeute – Rééducation neurologique</li>
-</ul>
-
-</section>
-
-<section>
-
 <h2>Formulaire de candidature</h2>
 
 <form>
 
 <input type="text" placeholder="Discord (Ex : .stirox)" required>
-
 <input type="text" placeholder="Nom" required>
-
 <input type="text" placeholder="Prénom" required>
-
 <input type="number" placeholder="Âge" required>
-
 <input type="tel" placeholder="N° téléphone" required>
 
 <label>Casier judiciaire</label>
@@ -211,59 +155,81 @@ font-size:.9rem;
 </select>
 
 <label>Expérience passée</label>
-<select>
-<option>Oui</option>
-<option>Non</option>
+<select id="experiencePasse">
+<option value="non">Non</option>
+<option value="oui">Oui</option>
 </select>
 
-<textarea placeholder="Si oui : Quel métier / grade / raison du changement / relation avec l'équipe"></textarea>
+<div id="expDetails" class="hidden">
+
+<textarea placeholder="Quel métier / grade / raison du changement / relation avec l'équipe"></textarea>
 
 <textarea placeholder="Comment vous décririez-vous ?"></textarea>
 
 <textarea placeholder="Quel est votre plus gros défaut ?"></textarea>
 
 <label>Expérience médicale IRL</label>
-<select>
-<option>Pratiquant</option>
-<option>Bonne connaissance</option>
-<option>Légère connaissance</option>
-<option>Aucune</option>
+<select id="experienceIRL">
+<option value="">Choisir</option>
+<option value="pratiquant">Pratiquant</option>
+<option value="bonne">Bonne connaissance</option>
+<option value="legere">Légère connaissance</option>
+<option value="aucune">Aucune</option>
 </select>
+
+</div>
+
+<div id="choixMetier" class="hidden">
 
 <h3>Si Pratiquant</h3>
 
 <label>Domaine</label>
-<select>
-<option>Médecine</option>
-<option>Infirmier</option>
-<option>Kiné</option>
+<select id="metierMedical">
+<option value="">Choisir</option>
+<option value="medecin">Médecin</option>
+<option value="infirmier">Infirmier</option>
+<option value="kine">Kinésithérapeute</option>
 </select>
 
-<h3>Si Médecin</h3>
+</div>
+
+<div id="medecinBox" class="hidden">
+
+<h3>Questions Médecin</h3>
 
 <input type="text" placeholder="Spécialisation">
 
 <input type="text" placeholder="Hôpital où vous avez travaillé">
 
-<textarea placeholder="Autres informations sur votre pratique médicale"></textarea>
+<textarea placeholder="Décrivez votre expérience médicale"></textarea>
 
-<h3>Si Infirmier</h3>
+</div>
+
+<div id="infirmierBox" class="hidden">
+
+<h3>Questions Infirmier</h3>
 
 <input type="text" placeholder="Spécialisation infirmière">
 
 <input type="text" placeholder="Hôpital où vous avez travaillé">
 
-<textarea placeholder="Expérience et missions réalisées"></textarea>
+<textarea placeholder="Décrivez votre expérience"></textarea>
 
-<h3>Si Kiné</h3>
+</div>
 
-<textarea placeholder="Expérience en kinésithérapie"></textarea>
+<div id="kineBox" class="hidden">
 
-<textarea placeholder="Quelles sont vos principales motivations pour rejoindre le CHL ?"></textarea>
+<h3>Questions Kinésithérapeute</h3>
+
+<textarea placeholder="Décrivez votre expérience en kinésithérapie"></textarea>
+
+</div>
+
+<textarea placeholder="Quelles sont vos motivations pour rejoindre le CHL ?"></textarea>
 
 <input type="text" placeholder="Quelle est votre citation préférée ?">
 
-<label>Quel mot vous représente le mieux</label>
+<label>Mot qui vous représente</label>
 <select>
 <option>Rapidité</option>
 <option>Efficacité</option>
@@ -275,10 +241,10 @@ font-size:.9rem;
 <option>Rigolade</option>
 </select>
 
-<div class="checkbox">
+<label>
 <input type="checkbox" required>
-<label>Prenez-vous en compte la formation afin d'intégrer le CHL ?</label>
-</div>
+Je prends en compte la formation afin d'intégrer le CHL
+</label>
 
 <button type="submit">Envoyer ma candidature</button>
 
@@ -291,6 +257,66 @@ font-size:.9rem;
 <footer>
 © 2026 – Centre Hospitalier de Liège – Tous droits réservés
 </footer>
+
+<script>
+
+const experiencePasse = document.getElementById("experiencePasse");
+const expDetails = document.getElementById("expDetails");
+
+const experienceIRL = document.getElementById("experienceIRL");
+const choixMetier = document.getElementById("choixMetier");
+
+const metierMedical = document.getElementById("metierMedical");
+
+const medecinBox = document.getElementById("medecinBox");
+const infirmierBox = document.getElementById("infirmierBox");
+const kineBox = document.getElementById("kineBox");
+
+experiencePasse.addEventListener("change", () => {
+
+if(experiencePasse.value === "oui"){
+expDetails.classList.remove("hidden");
+}else{
+expDetails.classList.add("hidden");
+choixMetier.classList.add("hidden");
+}
+
+});
+
+experienceIRL.addEventListener("change", () => {
+
+if(experienceIRL.value === "pratiquant"){
+choixMetier.classList.remove("hidden");
+}else{
+choixMetier.classList.add("hidden");
+medecinBox.classList.add("hidden");
+infirmierBox.classList.add("hidden");
+kineBox.classList.add("hidden");
+}
+
+});
+
+metierMedical.addEventListener("change", () => {
+
+medecinBox.classList.add("hidden");
+infirmierBox.classList.add("hidden");
+kineBox.classList.add("hidden");
+
+if(metierMedical.value === "medecin"){
+medecinBox.classList.remove("hidden");
+}
+
+if(metierMedical.value === "infirmier"){
+infirmierBox.classList.remove("hidden");
+}
+
+if(metierMedical.value === "kine"){
+kineBox.classList.remove("hidden");
+}
+
+});
+
+</script>
 
 </body>
 </html>
