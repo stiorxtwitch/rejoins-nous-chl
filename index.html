@@ -10,6 +10,7 @@
 
 :root{
 --accent:#00ffaa;
+--bg:#081a24;
 }
 
 *{
@@ -32,26 +33,30 @@ body::before{
 content:"";
 position:fixed;
 inset:0;
-background:rgba(5,20,30,0.85);
+background:rgba(5,20,30,0.88);
 z-index:-1;
 }
+
+/* HEADER */
 
 header{
 text-align:center;
 padding:60px;
 background:linear-gradient(135deg,#004080,#006699);
+box-shadow:0 10px 30px rgba(0,0,0,0.6);
 }
 
 main{
 max-width:1100px;
 margin:auto;
-padding:30px;
+padding:40px 20px;
 }
 
 section{
-background:rgba(10,30,40,0.8);
+background:rgba(10,30,40,0.85);
 padding:35px;
-border-radius:15px;
+border-radius:14px;
+box-shadow:0 10px 30px rgba(0,0,0,0.6);
 }
 
 h2{
@@ -60,15 +65,11 @@ margin-bottom:25px;
 }
 
 h3{
-margin:25px 0 10px;
+margin:30px 0 10px;
 color:var(--accent);
 }
 
-/* STRUCTURE */
-
-.form-section{
-margin-bottom:30px;
-}
+/* GRID */
 
 .grid{
 display:grid;
@@ -77,20 +78,43 @@ gap:18px;
 }
 
 .full{
-grid-column:1 / -1;
+grid-column:1/-1;
 }
 
-/* INPUT */
+/* INPUTS */
 
 input,textarea,select{
+
 width:100%;
 padding:14px;
+
 border-radius:8px;
 border:1px solid #005577;
-background:rgba(255,255,255,0.05);
+
+background:rgba(255,255,255,0.06);
+
 color:white;
 font-size:15px;
+
+transition:0.2s;
 }
+
+input:focus,
+textarea:focus,
+select:focus{
+outline:none;
+border-color:#00ffaa;
+box-shadow:0 0 8px rgba(0,255,170,0.4);
+}
+
+/* CORRECTION SELECT */
+
+select option{
+color:black;
+background:white;
+}
+
+/* TEXTAREA */
 
 textarea{
 resize:vertical;
@@ -100,17 +124,29 @@ min-height:90px;
 /* BUTTON */
 
 button{
+
 padding:16px;
+
 background:#00aa66;
+
 border:none;
+
 border-radius:10px;
+
 font-size:16px;
+
 color:white;
+
 cursor:pointer;
+
+transition:0.2s;
+
+margin-top:15px;
 }
 
 button:hover{
 background:#00cc88;
+transform:translateY(-2px);
 }
 
 /* HIDDEN */
@@ -143,13 +179,11 @@ color:#88aacc;
 
 <form>
 
-<!-- INFORMATIONS -->
-
-<div class="form-section">
+<!-- IDENTITE -->
 
 <div class="grid">
 
-<input placeholder="Discord (Ex: .stirox)">
+<input placeholder="Discord (Ex : .stirox)">
 <input placeholder="Téléphone">
 
 <input placeholder="Nom">
@@ -165,11 +199,8 @@ color:#88aacc;
 
 </div>
 
-</div>
 
 <!-- EXPERIENCE PASSEE -->
-
-<div class="form-section">
 
 <h3>Expérience passée</h3>
 
@@ -178,20 +209,34 @@ color:#88aacc;
 <option value="oui">Oui</option>
 </select>
 
-<div id="experienceDetails" class="hidden">
+<div id="experienceBox" class="hidden">
 
-<textarea class="full" placeholder="Quel métier / grade / raison du changement / relation avec l'équipe"></textarea>
+<div class="grid">
+
+<input placeholder="Quel métier">
+<input placeholder="Quel grade">
+
+<textarea placeholder="Raison du changement"></textarea>
+<textarea placeholder="Relation inter-équipe"></textarea>
+
+</div>
+
+</div>
+
+
+<!-- PERSONNALITE -->
+
+<h3>Personnalité</h3>
+
+<div class="grid">
 
 <textarea placeholder="Comment vous décririez-vous ?"></textarea>
 <textarea placeholder="Quel est votre plus gros défaut ?"></textarea>
 
 </div>
 
-</div>
 
-<!-- EXPERIENCE MEDICALE IRL -->
-
-<div class="form-section">
+<!-- EXPERIENCE MEDICALE -->
 
 <h3>Expérience médicale IRL</h3>
 
@@ -202,11 +247,8 @@ color:#88aacc;
 <option value="pratiquant">Pratiquant</option>
 </select>
 
-</div>
 
-<!-- PRATIQUANT -->
-
-<div id="pratiquantSection" class="form-section hidden">
+<div id="pratiquantSection" class="hidden">
 
 <h3>Domaine pratiqué</h3>
 
@@ -219,9 +261,10 @@ color:#88aacc;
 
 </div>
 
+
 <!-- MEDECIN -->
 
-<div id="medecinBox" class="form-section hidden">
+<div id="medecinBox" class="hidden">
 
 <h3>Questions Médecin</h3>
 
@@ -236,9 +279,10 @@ color:#88aacc;
 
 </div>
 
+
 <!-- INFIRMIER -->
 
-<div id="infirmierBox" class="form-section hidden">
+<div id="infirmierBox" class="hidden">
 
 <h3>Questions Infirmier</h3>
 
@@ -253,9 +297,10 @@ color:#88aacc;
 
 </div>
 
+
 <!-- KINE -->
 
-<div id="kineBox" class="form-section hidden">
+<div id="kineBox" class="hidden">
 
 <h3>Questions Kiné</h3>
 
@@ -263,9 +308,10 @@ color:#88aacc;
 
 </div>
 
+
 <!-- MOTIVATION -->
 
-<div class="form-section">
+<h3>Motivation</h3>
 
 <textarea placeholder="Quelles sont vos motivations pour rejoindre le CHL ?"></textarea>
 
@@ -285,10 +331,8 @@ color:#88aacc;
 
 <label>
 <input type="checkbox">
-Je prends en compte la formation afin d'intégrer le CHL
+ Je prends en compte la formation afin d'intégrer le CHL
 </label>
-
-</div>
 
 <button type="submit">Envoyer ma candidature</button>
 
@@ -302,19 +346,20 @@ Je prends en compte la formation afin d'intégrer le CHL
 © 2026 – Centre Hospitalier de Liège
 </footer>
 
+
 <script>
 
 /* EXPERIENCE PASSEE */
 
 const experiencePasse = document.getElementById("experiencePasse");
-const experienceDetails = document.getElementById("experienceDetails");
+const experienceBox = document.getElementById("experienceBox");
 
 experiencePasse.addEventListener("change",()=>{
 
 if(experiencePasse.value==="oui"){
-experienceDetails.classList.remove("hidden");
+experienceBox.classList.remove("hidden");
 }else{
-experienceDetails.classList.add("hidden");
+experienceBox.classList.add("hidden");
 }
 
 });
