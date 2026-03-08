@@ -4,14 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Recrutement - Centre Hospitalier de Liège</title>
+<title>Recrutement CHL</title>
 
 <style>
 
 :root{
 --primary:#0066cc;
---secondary:#00aa66;
---bg:#081a24;
+--secondary:#00ffaa;
 --grid:rgba(0,255,180,0.07);
 }
 
@@ -22,15 +21,13 @@ box-sizing:border-box;
 }
 
 body{
-font-family:system-ui,sans-serif;
+font-family:system-ui;
 color:#e0f0ff;
 min-height:100vh;
-overflow-x:hidden;
 
 background-image:url("https://i.pinimg.com/originals/89/e4/b6/89e4b6a49573b915b7f0d773fe1ef1de.gif");
 background-size:cover;
 background-position:center;
-background-repeat:no-repeat;
 background-attachment:fixed;
 }
 
@@ -38,78 +35,98 @@ body::before{
 content:"";
 position:fixed;
 inset:0;
-background:rgba(5,20,30,0.75);
+background:rgba(5,20,30,0.8);
 z-index:-1;
 }
 
-.ecg-grid{
-position:fixed;
-inset:0;
-
-background-image:
-linear-gradient(to bottom,transparent 0,transparent 19px,var(--grid) 19px,var(--grid) 20px),
-linear-gradient(to right,transparent 0,transparent 19px,var(--grid) 19px,var(--grid) 20px);
-
-background-size:20px 20px;
-pointer-events:none;
-z-index:-2;
-}
-
 header{
-background:linear-gradient(135deg,#004080,#006699);
-padding:60px 20px 40px;
 text-align:center;
+padding:60px 20px;
+background:linear-gradient(135deg,#004080,#006699);
 }
 
 main{
 max-width:1100px;
-margin:40px auto;
-padding:0 20px;
+margin:auto;
+padding:30px;
 }
 
 section{
-background:rgba(10,30,40,0.65);
-border-radius:16px;
-padding:32px;
-margin:32px 0;
+background:rgba(10,30,40,0.75);
+padding:35px;
+border-radius:14px;
 }
 
 h2{
 color:#00ffcc;
-margin-bottom:1.2em;
+margin-bottom:25px;
 }
 
 h3{
-margin-top:20px;
 color:#00ffaa;
+margin-top:25px;
+margin-bottom:10px;
 }
 
 form{
-display:grid;
-gap:16px;
+display:flex;
+flex-direction:column;
+gap:20px;
 }
+
+/* GRILLE FORMULAIRE */
+
+.form-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:18px;
+}
+
+.full{
+grid-column:1/-1;
+}
+
+/* INPUT */
 
 input,textarea,select{
+width:100%;
 padding:14px;
 border-radius:8px;
-border:1px solid #004466;
+border:1px solid #005577;
 background:rgba(255,255,255,0.05);
 color:white;
+font-size:15px;
 }
 
+textarea{
+resize:vertical;
+min-height:80px;
+}
+
+label{
+font-size:14px;
+opacity:0.8;
+}
+
+/* BOUTON */
+
 button{
-background:#00aa66;
-color:white;
-border:none;
 padding:16px;
-font-size:1.1rem;
+background:#00aa66;
+border:none;
 border-radius:10px;
+font-size:16px;
+color:white;
 cursor:pointer;
+transition:0.2s;
 }
 
 button:hover{
 background:#00cc88;
+transform:translateY(-2px);
 }
+
+/* SECTIONS CACHÉES */
 
 .hidden{
 display:none;
@@ -117,7 +134,7 @@ display:none;
 
 footer{
 text-align:center;
-padding:40px 20px;
+padding:40px;
 color:#88aacc;
 }
 
@@ -126,11 +143,11 @@ color:#88aacc;
 
 <body>
 
-<div class="ecg-grid"></div>
-
 <header>
-<h1>Recrutement CHL – Centre Hospitalier de Liège</h1>
+
+<h1>Recrutement – Centre Hospitalier de Liège</h1>
 <p>Rejoignez une équipe qui fait battre le cœur de la région</p>
+
 </header>
 
 <main>
@@ -141,36 +158,40 @@ color:#88aacc;
 
 <form>
 
-<input type="text" placeholder="Discord (Ex : .stirox)" required>
-<input type="text" placeholder="Nom" required>
-<input type="text" placeholder="Prénom" required>
-<input type="number" placeholder="Âge" required>
-<input type="tel" placeholder="N° téléphone" required>
+<div class="form-grid">
 
-<label>Casier judiciaire</label>
-<select required>
-<option value="">Choisir</option>
+<input type="text" placeholder="Discord (Ex : .stirox)">
+<input type="tel" placeholder="Téléphone">
+
+<input type="text" placeholder="Nom">
+<input type="text" placeholder="Prénom">
+
+<input type="number" placeholder="Âge">
+
+<select>
+<option>Casier judiciaire</option>
 <option>Vierge</option>
 <option>Pas vierge</option>
 </select>
 
-<label>Expérience passée</label>
 <select id="experiencePasse">
-<option value="non">Non</option>
-<option value="oui">Oui</option>
+<option value="non">Expérience passée : Non</option>
+<option value="oui">Expérience passée : Oui</option>
 </select>
+
+</div>
 
 <div id="expDetails" class="hidden">
 
-<textarea placeholder="Quel métier / grade / raison du changement / relation avec l'équipe"></textarea>
+<div class="form-grid">
+
+<textarea class="full" placeholder="Quel métier / grade / raison du changement / relation avec l'équipe"></textarea>
 
 <textarea placeholder="Comment vous décririez-vous ?"></textarea>
-
 <textarea placeholder="Quel est votre plus gros défaut ?"></textarea>
 
-<label>Expérience médicale IRL</label>
-<select id="experienceIRL">
-<option value="">Choisir</option>
+<select id="experienceIRL" class="full">
+<option value="">Expérience médicale IRL</option>
 <option value="pratiquant">Pratiquant</option>
 <option value="bonne">Bonne connaissance</option>
 <option value="legere">Légère connaissance</option>
@@ -179,13 +200,14 @@ color:#88aacc;
 
 </div>
 
+</div>
+
 <div id="choixMetier" class="hidden">
 
 <h3>Si Pratiquant</h3>
 
-<label>Domaine</label>
 <select id="metierMedical">
-<option value="">Choisir</option>
+<option value="">Choisir le domaine</option>
 <option value="medecin">Médecin</option>
 <option value="infirmier">Infirmier</option>
 <option value="kine">Kinésithérapeute</option>
@@ -197,11 +219,14 @@ color:#88aacc;
 
 <h3>Questions Médecin</h3>
 
-<input type="text" placeholder="Spécialisation">
+<div class="form-grid">
 
-<input type="text" placeholder="Hôpital où vous avez travaillé">
+<input placeholder="Spécialisation">
+<input placeholder="Hôpital où vous avez travaillé">
 
-<textarea placeholder="Décrivez votre expérience médicale"></textarea>
+<textarea class="full" placeholder="Décrivez votre expérience médicale"></textarea>
+
+</div>
 
 </div>
 
@@ -209,28 +234,31 @@ color:#88aacc;
 
 <h3>Questions Infirmier</h3>
 
-<input type="text" placeholder="Spécialisation infirmière">
+<div class="form-grid">
 
-<input type="text" placeholder="Hôpital où vous avez travaillé">
+<input placeholder="Spécialisation infirmière">
+<input placeholder="Hôpital où vous avez travaillé">
 
-<textarea placeholder="Décrivez votre expérience"></textarea>
+<textarea class="full" placeholder="Décrivez votre expérience"></textarea>
+
+</div>
 
 </div>
 
 <div id="kineBox" class="hidden">
 
-<h3>Questions Kinésithérapeute</h3>
+<h3>Questions Kiné</h3>
 
 <textarea placeholder="Décrivez votre expérience en kinésithérapie"></textarea>
 
 </div>
 
-<textarea placeholder="Quelles sont vos motivations pour rejoindre le CHL ?"></textarea>
+<textarea class="full" placeholder="Quelles sont vos motivations pour rejoindre le CHL ?"></textarea>
 
-<input type="text" placeholder="Quelle est votre citation préférée ?">
+<input placeholder="Quelle est votre citation préférée ?">
 
-<label>Mot qui vous représente</label>
 <select>
+<option>Mot qui vous représente</option>
 <option>Rapidité</option>
 <option>Efficacité</option>
 <option>Bonheur</option>
@@ -242,8 +270,7 @@ color:#88aacc;
 </select>
 
 <label>
-<input type="checkbox" required>
-Je prends en compte la formation afin d'intégrer le CHL
+<input type="checkbox"> Je prends en compte la formation pour intégrer le CHL
 </label>
 
 <button type="submit">Envoyer ma candidature</button>
@@ -255,7 +282,7 @@ Je prends en compte la formation afin d'intégrer le CHL
 </main>
 
 <footer>
-© 2026 – Centre Hospitalier de Liège – Tous droits réservés
+© 2026 – Centre Hospitalier de Liège
 </footer>
 
 <script>
@@ -272,9 +299,9 @@ const medecinBox = document.getElementById("medecinBox");
 const infirmierBox = document.getElementById("infirmierBox");
 const kineBox = document.getElementById("kineBox");
 
-experiencePasse.addEventListener("change", () => {
+experiencePasse.addEventListener("change",()=>{
 
-if(experiencePasse.value === "oui"){
+if(experiencePasse.value==="oui"){
 expDetails.classList.remove("hidden");
 }else{
 expDetails.classList.add("hidden");
@@ -283,9 +310,11 @@ choixMetier.classList.add("hidden");
 
 });
 
-experienceIRL.addEventListener("change", () => {
+document.addEventListener("change",(e)=>{
 
-if(experienceIRL.value === "pratiquant"){
+if(e.target.id==="experienceIRL"){
+
+if(e.target.value==="pratiquant"){
 choixMetier.classList.remove("hidden");
 }else{
 choixMetier.classList.add("hidden");
@@ -294,24 +323,22 @@ infirmierBox.classList.add("hidden");
 kineBox.classList.add("hidden");
 }
 
+}
+
 });
 
-metierMedical.addEventListener("change", () => {
+document.addEventListener("change",(e)=>{
+
+if(e.target.id==="metierMedical"){
 
 medecinBox.classList.add("hidden");
 infirmierBox.classList.add("hidden");
 kineBox.classList.add("hidden");
 
-if(metierMedical.value === "medecin"){
-medecinBox.classList.remove("hidden");
-}
+if(e.target.value==="medecin") medecinBox.classList.remove("hidden");
+if(e.target.value==="infirmier") infirmierBox.classList.remove("hidden");
+if(e.target.value==="kine") kineBox.classList.remove("hidden");
 
-if(metierMedical.value === "infirmier"){
-infirmierBox.classList.remove("hidden");
-}
-
-if(metierMedical.value === "kine"){
-kineBox.classList.remove("hidden");
 }
 
 });
