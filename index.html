@@ -6,12 +6,10 @@
 
 <title>Recrutement - Centre Hospitalier de Liège</title>
 
-<!-- OPEN GRAPH PREVIEW -->
 <meta property="og:title" content="Recrutement - Centre Hospitalier de Liège">
-<meta property="og:description" content="Rejoignez une équipe médicale qui fait battre le cœur de la région. Découvrez les postes ouverts au Centre Hospitalier de Liège.">
+<meta property="og:description" content="Rejoignez une équipe médicale qui fait battre le cœur de la région.">
 <meta property="og:image" content="https://www.apple.com/newsroom/fr/images/product/watch/standard/Apple-Watch-ECG-app-12062018_big.gif.large.gif">
 <meta property="og:type" content="website">
-<meta property="og:locale" content="fr_FR">
 
 <style>
 
@@ -29,227 +27,136 @@ box-sizing:border-box;
 }
 
 body{
-
 font-family:system-ui,sans-serif;
 color:#e0f0ff;
 min-height:100vh;
 overflow-x:hidden;
 
-/* GIF ECG */
-
 background-image:url("https://i.pinimg.com/originals/89/e4/b6/89e4b6a49573b915b7f0d773fe1ef1de.gif");
-
 background-size:cover;
 background-position:center;
 background-repeat:no-repeat;
 background-attachment:fixed;
-
 }
-
-/* couche sombre pour lisibilité */
 
 body::before{
-
 content:"";
-
 position:fixed;
 inset:0;
-
 background:rgba(5,20,30,0.75);
-
 backdrop-filter:blur(2px);
-
 z-index:-1;
-
 }
 
-/* grille ECG */
-
 .ecg-grid{
-
 position:fixed;
 inset:0;
 
 background-image:
-
 linear-gradient(to bottom,transparent 0,transparent 19px,var(--grid) 19px,var(--grid) 20px),
-
 linear-gradient(to right,transparent 0,transparent 19px,var(--grid) 19px,var(--grid) 20px);
 
 background-size:20px 20px;
-
 pointer-events:none;
-
 z-index:-2;
-
 }
 
-/* HEADER */
-
 header{
-
 background:linear-gradient(135deg,#004080,#006699);
-
 padding:60px 20px 40px;
-
 text-align:center;
-
 box-shadow:0 10px 40px rgba(0,0,0,0.5);
-
 }
 
 header h1{
-
 font-size:2.8rem;
-
 margin-bottom:10px;
-
-text-shadow:0 4px 10px rgba(0,0,0,0.7);
-
 }
-
-/* MAIN */
 
 main{
-
 max-width:1100px;
-
 margin:40px auto;
-
 padding:0 20px;
-
 }
 
-/* sections */
-
 section{
-
 background:rgba(10,30,40,0.65);
-
 backdrop-filter:blur(8px);
-
 border:1px solid rgba(255,255,255,0.12);
-
 border-radius:16px;
-
 padding:32px;
-
 margin:32px 0;
-
 box-shadow:0 10px 40px rgba(0,0,0,0.6);
-
 }
 
 h2{
-
 color:#00ffcc;
-
 margin-bottom:1.2em;
-
 border-bottom:2px solid rgba(0,255,204,0.3);
-
 padding-bottom:.6em;
-
 }
 
-/* liste */
+h3{
+margin-top:20px;
+color:#00ffaa;
+}
 
 ul{
-
 list-style:none;
-
 }
 
 li{
-
 background:rgba(0,0,0,0.35);
-
 margin:12px 0;
-
 padding:16px;
-
 border-radius:10px;
-
-transition:all .25s;
-
 }
-
-li:hover{
-
-background:rgba(0,180,120,0.3);
-
-transform:translateX(8px);
-
-}
-
-/* formulaire */
 
 form{
-
 display:grid;
-
 gap:16px;
-
 }
 
-input,textarea{
-
+input,textarea,select{
 padding:14px;
-
 border:1px solid #004466;
-
 border-radius:8px;
-
 background:rgba(255,255,255,0.05);
-
 color:white;
-
 font-size:1rem;
-
 }
 
 button{
-
 background:#00aa66;
-
 color:white;
-
 border:none;
-
 padding:16px;
-
 font-size:1.1rem;
-
 border-radius:10px;
-
 cursor:pointer;
-
 transition:.3s;
-
 }
 
 button:hover{
-
 background:#00cc88;
-
 transform:translateY(-2px);
-
-box-shadow:0 8px 20px rgba(0,200,120,0.4);
-
 }
 
-/* footer */
+label{
+margin-top:10px;
+}
+
+.checkbox{
+display:flex;
+align-items:center;
+gap:10px;
+}
 
 footer{
-
 text-align:center;
-
 padding:40px 20px;
-
 color:#88aacc;
-
 font-size:.9rem;
-
 }
 
 </style>
@@ -260,11 +167,8 @@ font-size:.9rem;
 <div class="ecg-grid"></div>
 
 <header>
-
 <h1>Recrutement CHL – Centre Hospitalier de Liège</h1>
-
 <p>Rejoignez une équipe qui fait battre le cœur de la région</p>
-
 </header>
 
 <main>
@@ -274,34 +178,107 @@ font-size:.9rem;
 <h2>Postes ouverts actuellement</h2>
 
 <ul>
-
 <li>Infirmier(ère) – Urgences & Soins Intensifs</li>
-
 <li>Médecin spécialiste – Cardiologie / Radiologie</li>
-
-<li>Technicien(ne) de laboratoire – Hématologie / Biochimie</li>
-
+<li>Technicien(ne) de laboratoire – Hématologie</li>
 <li>Assistant administratif – Service RH</li>
-
 <li>Kinésithérapeute – Rééducation neurologique</li>
-
 </ul>
 
 </section>
 
 <section>
 
-<h2>Envoyer votre candidature</h2>
+<h2>Formulaire de candidature</h2>
 
 <form>
 
-<input type="text" placeholder="Nom complet" required>
+<input type="text" placeholder="Discord (Ex : .stirox)" required>
 
-<input type="email" placeholder="Adresse e-mail" required>
+<input type="text" placeholder="Nom" required>
 
-<input type="text" placeholder="Poste visé" required>
+<input type="text" placeholder="Prénom" required>
 
-<textarea rows="5" placeholder="Motivation / CV ou lien LinkedIn"></textarea>
+<input type="number" placeholder="Âge" required>
+
+<input type="tel" placeholder="N° téléphone" required>
+
+<label>Casier judiciaire</label>
+<select required>
+<option value="">Choisir</option>
+<option>Vierge</option>
+<option>Pas vierge</option>
+</select>
+
+<label>Expérience passée</label>
+<select>
+<option>Oui</option>
+<option>Non</option>
+</select>
+
+<textarea placeholder="Si oui : Quel métier / grade / raison du changement / relation avec l'équipe"></textarea>
+
+<textarea placeholder="Comment vous décririez-vous ?"></textarea>
+
+<textarea placeholder="Quel est votre plus gros défaut ?"></textarea>
+
+<label>Expérience médicale IRL</label>
+<select>
+<option>Pratiquant</option>
+<option>Bonne connaissance</option>
+<option>Légère connaissance</option>
+<option>Aucune</option>
+</select>
+
+<h3>Si Pratiquant</h3>
+
+<label>Domaine</label>
+<select>
+<option>Médecine</option>
+<option>Infirmier</option>
+<option>Kiné</option>
+</select>
+
+<h3>Si Médecin</h3>
+
+<input type="text" placeholder="Spécialisation">
+
+<input type="text" placeholder="Hôpital où vous avez travaillé">
+
+<textarea placeholder="Autres informations sur votre pratique médicale"></textarea>
+
+<h3>Si Infirmier</h3>
+
+<input type="text" placeholder="Spécialisation infirmière">
+
+<input type="text" placeholder="Hôpital où vous avez travaillé">
+
+<textarea placeholder="Expérience et missions réalisées"></textarea>
+
+<h3>Si Kiné</h3>
+
+<textarea placeholder="Expérience en kinésithérapie"></textarea>
+
+<textarea placeholder="Quelles sont vos principales motivations pour rejoindre le CHL ?"></textarea>
+
+<input type="text" placeholder="Quelle est votre citation préférée ?">
+
+<label>Quel mot vous représente le mieux</label>
+<select>
+<option>Rapidité</option>
+<option>Efficacité</option>
+<option>Bonheur</option>
+<option>Tolérance</option>
+<option>Humanisme</option>
+<option>Intransigeance</option>
+<option>Sérieux</option>
+<option>Rigolade</option>
+</select>
+
+<div class="checkbox">
+<input type="checkbox" required>
+<label>Prenez-vous en compte la formation afin d'intégrer le CHL ?</label>
+</div>
 
 <button type="submit">Envoyer ma candidature</button>
 
@@ -312,9 +289,7 @@ font-size:.9rem;
 </main>
 
 <footer>
-
 © 2026 – Centre Hospitalier de Liège – Tous droits réservés
-
 </footer>
 
 </body>
