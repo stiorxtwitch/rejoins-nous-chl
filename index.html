@@ -486,6 +486,23 @@ footer{text-align:center;padding:30px;font-family:'Share Tech Mono',monospace;fo
 const BOT_URL = "https://chl-bot-gestion.onrender.com";
 
 // ══════════════════════════════════════════
+//  WAKE-UP RENDER AU CHARGEMENT DE LA PAGE
+//  Render met les serveurs gratuits en veille.
+//  On ping "/" dès que la page charge pour le réveiller
+//  avant que l'utilisateur tape son pseudo.
+// ══════════════════════════════════════════
+let serverReady = false;
+
+(async function wakeUpServer() {
+  try {
+    const r = await fetch(`${BOT_URL}/`, { method: "GET", mode: "cors" });
+    if (r.ok) { serverReady = true; }
+  } catch (_) {
+    // Silencieux — le retry dans verifyDiscord prendra le relais
+  }
+})();
+
+// ══════════════════════════════════════════
 //  VÉRIFICATION DISCORD EN TEMPS RÉEL
 // ══════════════════════════════════════════
 let discordDebounceTimer = null;
@@ -513,22 +530,55 @@ function setDiscordState(state, message) {
   if (state === "checking") { discordVerified = false; }
 }
 
+// Fetch avec retry : si le serveur répond 503 (cold start Render),
+// on attend et on réessaie jusqu'à MAX_RETRIES fois.
+async function fetchWithRetry(url, maxRetries = 4, delayMs = 3000) {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const res = await fetch(url, { mode: "cors" });
+      if (res.ok) return res;
+      // 503 = serveur en cold start → on attend et on réessaie
+      if (res.status === 503 && attempt < maxRetries) {
+        setDiscordState("checking", `SERVEUR EN DÉMARRAGE... (${attempt}/${maxRetries})`);
+        await new Promise(r => setTimeout(r, delayMs));
+        continue;
+      }
+      return res; // autre code HTTP → on retourne quand même
+    } catch (networkErr) {
+      if (attempt < maxRetries) {
+        setDiscordState("checking", `RECONNEXION... (${attempt}/${maxRetries})`);
+        await new Promise(r => setTimeout(r, delayMs));
+      } else {
+        throw networkErr;
+      }
+    }
+  }
+}
+
 async function verifyDiscord(username) {
   if (!username) { setDiscordState("hidden", ""); return; }
 
   setDiscordState("checking", "VÉRIFICATION EN COURS...");
 
   try {
-    const res  = await fetch(`${BOT_URL}/api/check-discord?username=${encodeURIComponent(username)}`);
+    const res  = await fetchWithRetry(
+      `${BOT_URL}/api/check-discord?username=${encodeURIComponent(username)}`
+    );
     const data = await res.json();
 
     if (data.found) {
       setDiscordState("ok", "PSEUDO CONFIRMÉ");
     } else {
-      setDiscordState("err", "PSEUDO ÉRRONÉ OU NON PRÉSENT SUR LE DISCORD");
+      setDiscordState("err", "PSEUDO ERRONÉ OU NON PRÉSENT SUR LE DISCORD");
     }
   } catch (err) {
-    setDiscordState("hidden", "");
+    // Erreur réseau persistante après tous les retries
+    setDiscordState("err", "SERVEUR INACCESSIBLE — RÉESSAYEZ DANS UN INSTANT");
+    // Reset après 4s pour permettre une nouvelle tentative
+    setTimeout(() => {
+      const val = discordInput.value.trim();
+      if (val) setDiscordState("hidden", "");
+    }, 4000);
   }
 }
 
