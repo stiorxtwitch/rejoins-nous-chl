@@ -59,6 +59,26 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
 .hidden{display:none !important}
 .sep{height:1px;background:linear-gradient(90deg,transparent,var(--border2),transparent);margin:32px 0}
 
+/* ── Hopital selector pills ── */
+.hopital-selector{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:2px}
+.hopital-pill{position:relative}
+.hopital-pill input[type="radio"]{position:absolute;opacity:0;width:0;height:0}
+.hopital-pill label{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  padding:14px 10px;border-radius:3px;cursor:pointer;
+  border:1px solid var(--border);background:rgba(255,255,255,0.04);
+  font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;
+  color:var(--muted);transition:all .2s;user-select:none;
+}
+.hopital-pill label .pill-icon{font-size:20px;line-height:1}
+.hopital-pill input[type="radio"]:checked + label{
+  border-color:var(--accent2);
+  background:rgba(0,232,154,0.08);
+  color:var(--accent);
+  box-shadow:0 0 0 3px rgba(0,232,154,0.08);
+}
+.hopital-pill label:hover{border-color:rgba(0,180,120,0.35);color:var(--text)}
+
 /* ── Discord verification feedback ── */
 .discord-check{
   display:flex;align-items:center;gap:7px;
@@ -327,6 +347,28 @@ footer{text-align:center;padding:30px;font-family:'Share Tech Mono',monospace;fo
             <option value="Pas vierge">Pas vierge</option>
           </select>
         </div>
+
+        <!-- ── NOUVEAU : Sélection de l'hôpital ── -->
+        <div class="field-group full">
+          <label class="field-label">Hôpital visé *</label>
+          <div class="hopital-selector">
+            <div class="hopital-pill">
+              <input type="radio" name="hopital" id="hopital-nord" value="nord" required>
+              <label for="hopital-nord">
+                <span class="pill-icon">🏥</span>
+                HÔPITAL NORD
+              </label>
+            </div>
+            <div class="hopital-pill">
+              <input type="radio" name="hopital" id="hopital-sud" value="sud">
+              <label for="hopital-sud">
+                <span class="pill-icon">🏥</span>
+                HÔPITAL SUD
+              </label>
+            </div>
+          </div>
+        </div>
+
       </div>
 
       <div class="sep"></div>
@@ -447,14 +489,13 @@ const BOT_URL = "https://chl-bot-gestion.onrender.com";
 //  VÉRIFICATION DISCORD EN TEMPS RÉEL
 // ══════════════════════════════════════════
 let discordDebounceTimer = null;
-let discordVerified = false; // true = pseudo trouvé sur le serveur
+let discordVerified = false;
 
 const discordInput  = document.getElementById("discord");
 const discordCheck  = document.getElementById("discordCheck");
 const discordLabel  = document.getElementById("discordCheckLabel");
 
 function setDiscordState(state, message) {
-  // state: 'checking' | 'ok' | 'err' | 'hidden'
   discordCheck.className = "discord-check";
   discordInput.classList.remove("is-valid", "is-invalid");
 
@@ -487,7 +528,6 @@ async function verifyDiscord(username) {
       setDiscordState("err", "PSEUDO ÉRRONÉ OU NON PRÉSENT SUR LE DISCORD");
     }
   } catch (err) {
-    // En cas d'erreur réseau / serveur indisponible, on laisse passer sans bloquer
     setDiscordState("hidden", "");
   }
 }
@@ -495,19 +535,13 @@ async function verifyDiscord(username) {
 discordInput.addEventListener("input", function () {
   const val = this.value.trim();
   clearTimeout(discordDebounceTimer);
-
   if (!val) { setDiscordState("hidden", ""); return; }
-
-  // Debounce 700ms pour ne pas spammer l'API à chaque frappe
   discordDebounceTimer = setTimeout(() => verifyDiscord(val), 700);
 });
 
 discordInput.addEventListener("blur", function () {
   const val = this.value.trim();
-  if (val) {
-    clearTimeout(discordDebounceTimer);
-    verifyDiscord(val);
-  }
+  if (val) { clearTimeout(discordDebounceTimer); verifyDiscord(val); }
 });
 
 // ── Sélecteurs conditionnels ──
@@ -533,6 +567,7 @@ function openStep1() {
   const prenom  = document.getElementById("prenom").value.trim();
   const motiv   = document.getElementById("motivation").value.trim();
   const form    = document.getElementById("formation").value;
+  const hopital = document.querySelector('input[name="hopital"]:checked');
 
   if (!discord || !nom || !prenom || !motiv || !form) {
     status.textContent = "⚠ Veuillez remplir tous les champs obligatoires (*).";
@@ -540,25 +575,24 @@ function openStep1() {
     return;
   }
 
-  // Injecter le nom dans la modale
-  document.getElementById("discordNameDisplay").textContent = discord;
+  if (!hopital) {
+    status.textContent = "⚠ Veuillez sélectionner un hôpital (Nord ou Sud).";
+    status.className = "status error";
+    return;
+  }
 
-  // Reset état step2
+  document.getElementById("discordNameDisplay").textContent = discord;
   document.getElementById("cancelBanner").classList.remove("show");
   document.getElementById("ynWrap").style.display = "flex";
-
-  // Ouvrir step1
   document.getElementById("modalStep1").classList.add("open");
-  status.className = "status"; // reset erreur
+  status.className = "status";
 }
 
-// ── Step1 : c'est correct → step2 ──
 function confirmDiscord() {
   document.getElementById("modalStep1").classList.remove("open");
   document.getElementById("modalStep2").classList.add("open");
 }
 
-// ── Step1 : modifier → fermer + focus champ discord ──
 function editDiscord() {
   document.getElementById("modalStep1").classList.remove("open");
   setTimeout(() => {
@@ -568,19 +602,15 @@ function editDiscord() {
   }, 160);
 }
 
-// ── Step2 : oui/non ──
 function confirmServer(isOnServer) {
   if (isOnServer) {
     document.getElementById("modalStep2").classList.remove("open");
     sendForm();
   } else {
-    // Afficher le message SANS vider le formulaire
     document.getElementById("ynWrap").style.display = "none";
     document.getElementById("cancelBanner").classList.add("show");
-    // Fermer automatiquement après 3.5s
     setTimeout(() => {
       document.getElementById("modalStep2").classList.remove("open");
-      // Remettre les boutons pour la prochaine tentative
       setTimeout(() => {
         document.getElementById("ynWrap").style.display = "flex";
         document.getElementById("cancelBanner").classList.remove("show");
@@ -589,24 +619,26 @@ function confirmServer(isOnServer) {
   }
 }
 
-// ── Envoi réel ──
 async function sendForm() {
   const btn    = document.getElementById("submitBtn");
   const status = document.getElementById("statusMsg");
 
   const metier = document.getElementById("metierMedical").value;
-  let specialisation = "", hopital = "", expDetail = "";
+  let specialisation = "", hopitalExp = "", expDetail = "";
   if (metier === "medecin") {
     specialisation = document.getElementById("specialisationMed").value.trim();
-    hopital        = document.getElementById("hopitalMed").value.trim();
+    hopitalExp     = document.getElementById("hopitalMed").value.trim();
     expDetail      = document.getElementById("expDetailMed").value.trim();
   } else if (metier === "infirmier") {
     specialisation = document.getElementById("specialisationInf").value.trim();
-    hopital        = document.getElementById("hopitalInf").value.trim();
+    hopitalExp     = document.getElementById("hopitalInf").value.trim();
     expDetail      = document.getElementById("expDetailInf").value.trim();
   } else if (metier === "kine") {
     expDetail = document.getElementById("expDetailKine").value.trim();
   }
+
+  // Récupérer l'hôpital sélectionné (nord ou sud)
+  const hopitalChoisi = document.querySelector('input[name="hopital"]:checked')?.value || "nord";
 
   const payload = {
     discord        : document.getElementById("discord").value.trim(),
@@ -615,6 +647,7 @@ async function sendForm() {
     prenom         : document.getElementById("prenom").value.trim(),
     age            : document.getElementById("age").value,
     casier         : document.getElementById("casier").value,
+    hopitalCible   : hopitalChoisi,  // "nord" ou "sud"
     experiencePasse: document.getElementById("experiencePasse").value,
     ancienMetier   : document.getElementById("ancienMetier")?.value.trim() || "",
     ancienGrade    : document.getElementById("ancienGrade")?.value.trim()  || "",
@@ -624,7 +657,9 @@ async function sendForm() {
     defaut         : document.getElementById("defaut").value.trim(),
     expMedicale    : document.getElementById("experienceMedicale").value,
     metierMedical  : metier,
-    specialisation, hopital, expDetail,
+    specialisation,
+    hopital        : hopitalExp,
+    expDetail,
     motivation     : document.getElementById("motivation").value.trim(),
     citation       : document.getElementById("citation").value.trim(),
     mot            : document.getElementById("mot").value,
